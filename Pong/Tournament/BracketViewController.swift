@@ -15,24 +15,37 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
     var numPlayers = 0.0
     var visiblePlayers = 0
     var tourneyID = ""
-    var playerList: [Player] = []
+    var playerList: [[Player]] = [[],[],[],[],[]]
     var playerDocIDs: [String] = []
-    var ref: DocumentReference? = nil
-    var db = Firestore.firestore()
-    
+    var firebase = FirebaseService.shared
+    var firstRoundGameIDs: [String] = []
+    var gamesCreated = false
+
+    @IBOutlet weak var leaveTourneyButton: UIButton!
+    @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var idLabel: UILabel!
     @IBOutlet weak var segments: UISegmentedControl!
     @IBOutlet weak var tableView: UITableView!
     let segTitles = ["Final", "Semifinal", "Quarterfinal", "16", "32"]
+    let defaults = UserDefaults()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        updatePlayerList()
+        firebase.fetchTournamentPlayerData(tourneyID) { players in
+            self.playerList[0] = players
+            self.tableView.reloadData()
+        }
+        firebase.fetchTournamentGameIDs(tourneyID) { gameIDs in
+            self.firstRoundGameIDs = gameIDs
+            print(self.firstRoundGameIDs)
+        }
+        
         visiblePlayers = Int(numPlayers)
         segments.removeAllSegments()
         addSegments()
-        getPlayerInfo()
         segments.selectedSegmentIndex = 0
+        leaveTourneyButton.layer.cornerRadius = 25
+        defaults.set(numPlayers, forKey: "numPlayers")
         idLabel.text = "Tournament ID: \(tourneyID)"
         tableView.delegate = self
         tableView.dataSource = self
@@ -53,6 +66,20 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.reloadData()
     }
     
+    @IBAction func leaveTourneyClicked(_ sender: Any) {
+        let user = firebase.authentication?.currentUser?.uid ?? ""
+        let player = firebase.playersRef?.document(user)
+        firebase.tournamentsRef?.document(tourneyID).updateData([
+            "tourneyFull": false,
+            "players": FieldValue.arrayRemove([player ?? ""]),
+            "registeredPlayers": playerList.count-1
+        ])
+        defaults.removeObject(forKey: user)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let home = storyboard.instantiateViewController(identifier: "HomeViewController")
+        UIApplication.shared.keyWindow?.rootViewController = home
+    }
+    
     func addSegments() {
         print(numPlayers)
         let numSegs = Int(log2(numPlayers))
@@ -70,9 +97,14 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let seg = segments.selectedSegmentIndex
         let cell = tableView.dequeueReusableCell(withIdentifier: "bracketCell") as! BracketTableViewCell
-        if playerList.indices.contains(indexPath.row + (2*indexPath.section)) {
-            cell.name.text = playerList[indexPath.row + (2*indexPath.section)].firstName
+        if playerList[seg].indices.contains(indexPath.row + (2*indexPath.section)) {
+            cell.name.text = playerList[seg][indexPath.row + (2*indexPath.section)].firstName
+            cell.cupsHit.text = "0"
+        } else {
+            cell.name.text = "TBD"
+            cell.cupsHit.text = "0"
         }
         return cell
     }
@@ -92,76 +124,24 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         view.tintColor = tableView.backgroundColor
     }
-    
-    //!!!!!! ADD LISTENERS, WILL ALSO LISTEN TO LOCAL WRITES! SO WHEN A NEW PLAYER JOINS AND IS ADDED TO THE TOURNEYVC, ITLL AUTOMATICALLY UPDATE
-
-    func getPlayerInfo() {
-        let newPlayer = Auth.auth().currentUser?.uid ?? ""
-        let playersRef = db.collection("users")
-        _ = playersRef.whereField("id", isEqualTo: newPlayer)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                 let result = Result {
-                     try document.data(as: Player.self)
-                 }
-                 switch result {
-                 case .success(let player):
-                     if let player = player {
-                         self.playerList.append(player)
-                     } else {
-                         //nil
-                     }
-                 case .failure(let error):
-                     print("Error decoding player: \(error)")
-                    }
-                }
-            }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let seg = segments.selectedSegmentIndex
+        if playerList[seg].indices.contains(2*indexPath.section) && playerList[seg].indices.contains(1+2*indexPath.section){
+            self.performSegue(withIdentifier: "goToGame", sender: self)
         }
     }
     
-    func updatePlayerList() {
-        let tourneyRef = db.collection("tournament").document(tourneyID)
-        tourneyRef.getDocument { (document, error) in
-                if let document = document, document.exists {
-                    let refArray = document.get("players") as? [DocumentReference] ?? []
-                    for docRef in refArray {
-                        self.playerDocIDs.append(docRef.documentID)
-                    }
-                } else {
-                    print("Doc does not exist")
-                }
-            
-            for id in self.playerDocIDs {
-                let playersRef = self.db.collection("users")
-                _ = playersRef.whereField("id", isEqualTo: id)
-                    .getDocuments() { (querySnapshot, err) in
-                    if let err = err {
-                        print("Error getting documents: \(err)")
-                    } else {
-                        for document in querySnapshot!.documents {
-                         let result = Result {
-                             try document.data(as: Player.self)
-                         }
-                         switch result {
-                         case .success(let player):
-                             if let player = player {
-                                 self.playerList.append(player)
-                             } else {
-                                 //nil
-                             }
-                         case .failure(let error):
-                             print("Error decoding player: \(error)")
-                            }
-                        }
-                    }
-                }
-            
-            }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let seg = segments.selectedSegmentIndex
+        guard let gameVC = segue.destination as? GameViewController else { return }
+        if let indexPath = self.tableView.indexPathForSelectedRow {
+            gameVC.player1Name = playerList[seg][2*indexPath.section].firstName // NOT NECESSARY ANYMORE PASSING IN PLAYERS
+            gameVC.player2Name = playerList[seg][1 + (2*indexPath.section)].firstName
+            gameVC.players = [playerList[seg][2*indexPath.section], playerList[seg][1 + (2*indexPath.section)]]
+            gameVC.gameID = firstRoundGameIDs[indexPath.section]
         }
     }
+    
 }
 
 

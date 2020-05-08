@@ -15,8 +15,10 @@ class JoinTournamentViewController: UIViewController {
     @IBOutlet weak var tourneyID: UITextField!
     @IBOutlet weak var joinButton: UIButton!
     var numPlayers = 0
-    var ref: DocumentReference? = nil
-    var db = Firestore.firestore()
+    var playersRegistered = 0
+    let firebase = FirebaseService.shared
+    var tourneyNowFull = false
+    let defaults = UserDefaults()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,12 +41,24 @@ class JoinTournamentViewController: UIViewController {
     }
     
     func checkIfTourneyOpen() {
-        let tourneyRef = db.collection("tournament").document(tourneyID.text ?? "")
-        tourneyRef.getDocument { (document, error) in
+        firebase.docRef = firebase.tournamentsRef?.document(tourneyID.text ?? "")
+        firebase.docRef?.getDocument { (document, error) in
                 if let document = document, document.exists {
                     self.numPlayers = document.get("numPlayers") as! Int
-                    print("From closure \(self.numPlayers)")
-                    self.joinTournament()
+                    self.playersRegistered = document.get("registeredPlayers") as! Int
+                    self.tourneyNowFull = document.get("tourneyFull") as! Bool
+                    if self.tourneyNowFull {
+                        let alertController = UIAlertController(title: "Error", message: "Tournament is full.", preferredStyle: .alert)
+                        let defaultAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                        alertController.addAction(defaultAction)
+                        self.present(alertController, animated: true, completion: nil)
+                    } else {
+                        self.playersRegistered += 1
+                        if self.playersRegistered == self.numPlayers {
+                            self.tourneyNowFull = true
+                        }
+                        self.joinTournament()
+                    }
                 } else {
                     let alertController = UIAlertController(title: "Error", message: "Tournament does not exist.", preferredStyle: .alert)
                     let defaultAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
@@ -55,13 +69,15 @@ class JoinTournamentViewController: UIViewController {
     }
     
     func joinTournament() {
-        let user = Auth.auth().currentUser?.uid ?? ""
-        let playersRef = db.collection("users")
-        let player = playersRef.document(user)
-        let tourneyRef = db.collection("tournament").document(tourneyID.text ?? "")
-        tourneyRef.updateData([
-            "players": FieldValue.arrayUnion([player])
+        let user = firebase.authentication?.currentUser?.uid ?? ""
+        let player = firebase.playersRef?.document(user)
+        firebase.docRef = firebase.tournamentsRef?.document(tourneyID.text ?? "")
+        firebase.docRef?.updateData([
+            "players": FieldValue.arrayUnion([player]),
+            "registeredPlayers": playersRegistered,
+            "tourneyFull": tourneyNowFull
         ])
+        defaults.set(tourneyID.text, forKey: user)
         self.performSegue(withIdentifier: "joinToBracket", sender: self)
     }
 

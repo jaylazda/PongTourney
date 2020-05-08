@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		82065B192464F8EF00835449 /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82065B182464F8EF00835449 /* GameViewModel.swift */; };
+		8227C8AF245F3D51005D3301 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8227C8AE245F3D51005D3301 /* FirebaseService.swift */; };
 		8257A303245760B8004641C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8257A302245760B8004641C6 /* AppDelegate.swift */; };
 		8257A305245760B8004641C6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8257A304245760B8004641C6 /* SceneDelegate.swift */; };
 		8257A30A245760B8004641C6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8257A308245760B8004641C6 /* Main.storyboard */; };
@@ -31,10 +33,13 @@
 		8257A33C245B6815004641C6 /* Tournament.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8257A33B245B6815004641C6 /* Tournament.swift */; };
 		8257A33E245B68EB004641C6 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8257A33D245B68EB004641C6 /* Game.swift */; };
 		8257A340245BC52D004641C6 /* JoinTournamentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8257A33F245BC52D004641C6 /* JoinTournamentViewController.swift */; };
+		8298119D246269C4004DD06A /* BracketViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8298119C246269C4004DD06A /* BracketViewModel.swift */; };
 		A42BFBAA4FD0F010570576B9 /* Pods_Pong.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2551985735038CE20614BD0 /* Pods_Pong.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		82065B182464F8EF00835449 /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
+		8227C8AE245F3D51005D3301 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		8257A2FF245760B8004641C6 /* Pong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pong.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8257A302245760B8004641C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8257A304245760B8004641C6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -61,6 +66,7 @@
 		8257A33B245B6815004641C6 /* Tournament.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tournament.swift; sourceTree = "<group>"; };
 		8257A33D245B68EB004641C6 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		8257A33F245BC52D004641C6 /* JoinTournamentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinTournamentViewController.swift; sourceTree = "<group>"; };
+		8298119C246269C4004DD06A /* BracketViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BracketViewModel.swift; sourceTree = "<group>"; };
 		C3B320B473ED50B1D7FF4084 /* Pods-Pong.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pong.release.xcconfig"; path = "Target Support Files/Pods-Pong/Pods-Pong.release.xcconfig"; sourceTree = "<group>"; };
 		D6E253FF93172EE9CA77F1A8 /* Pods-Pong.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pong.debug.xcconfig"; path = "Target Support Files/Pods-Pong/Pods-Pong.debug.xcconfig"; sourceTree = "<group>"; };
 		E2551985735038CE20614BD0 /* Pods_Pong.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pong.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -87,6 +93,41 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		8227C8A7245F0837005D3301 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				8257A33B245B6815004641C6 /* Tournament.swift */,
+				8257A33D245B68EB004641C6 /* Game.swift */,
+				8257A320245779A3004641C6 /* Player.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		8227C8A8245F0941005D3301 /* Leaderboards */ = {
+			isa = PBXGroup;
+			children = (
+				8257A31A24576B83004641C6 /* LeaderboardsTableViewController.swift */,
+			);
+			path = Leaderboards;
+			sourceTree = "<group>";
+		};
+		8227C8A9245F0971005D3301 /* Main Menu */ = {
+			isa = PBXGroup;
+			children = (
+				8257A31824576684004641C6 /* HomeViewController.swift */,
+			);
+			path = "Main Menu";
+			sourceTree = "<group>";
+		};
+		8227C8AA245F098E005D3301 /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				8257A335245A4126004641C6 /* GameViewController.swift */,
+				82065B182464F8EF00835449 /* GameViewModel.swift */,
+			);
+			path = Game;
+			sourceTree = "<group>";
+		};
 		8257A2F6245760B8004641C6 = {
 			isa = PBXGroup;
 			children = (
@@ -110,18 +151,17 @@
 		8257A301245760B8004641C6 /* Pong */ = {
 			isa = PBXGroup;
 			children = (
+				8227C8AE245F3D51005D3301 /* FirebaseService.swift */,
 				8257A302245760B8004641C6 /* AppDelegate.swift */,
 				8257A304245760B8004641C6 /* SceneDelegate.swift */,
-				8257A31A24576B83004641C6 /* LeaderboardsTableViewController.swift */,
-				8257A32924586CFA004641C6 /* Startup */,
-				8257A32624586C42004641C6 /* Cells */,
-				8257A31824576684004641C6 /* HomeViewController.swift */,
-				8257A3302459375D004641C6 /* Tournament */,
 				8257A308245760B8004641C6 /* Main.storyboard */,
-				8257A335245A4126004641C6 /* GameViewController.swift */,
-				8257A33B245B6815004641C6 /* Tournament.swift */,
-				8257A33D245B68EB004641C6 /* Game.swift */,
-				8257A320245779A3004641C6 /* Player.swift */,
+				8257A32924586CFA004641C6 /* Startup */,
+				8227C8A8245F0941005D3301 /* Leaderboards */,
+				8257A32624586C42004641C6 /* Cells */,
+				8227C8A9245F0971005D3301 /* Main Menu */,
+				8257A3302459375D004641C6 /* Tournament */,
+				8227C8AA245F098E005D3301 /* Game */,
+				8227C8A7245F0837005D3301 /* Model */,
 				8257A30B245760BD004641C6 /* Assets.xcassets */,
 				8257A30D245760BD004641C6 /* LaunchScreen.storyboard */,
 				8257A310245760BD004641C6 /* Info.plist */,
@@ -157,6 +197,7 @@
 				8257A32C24592C70004641C6 /* BracketSetupViewController.swift */,
 				8257A33F245BC52D004641C6 /* JoinTournamentViewController.swift */,
 				8257A32E24593505004641C6 /* BracketViewController.swift */,
+				8298119C246269C4004DD06A /* BracketViewModel.swift */,
 			);
 			path = Tournament;
 			sourceTree = "<group>";
@@ -293,15 +334,18 @@
 				8257A33E245B68EB004641C6 /* Game.swift in Sources */,
 				8257A303245760B8004641C6 /* AppDelegate.swift in Sources */,
 				8257A32324586C0F004641C6 /* SignUpViewController.swift in Sources */,
+				8227C8AF245F3D51005D3301 /* FirebaseService.swift in Sources */,
 				8257A305245760B8004641C6 /* SceneDelegate.swift in Sources */,
 				8257A31924576684004641C6 /* HomeViewController.swift in Sources */,
 				8257A336245A4126004641C6 /* GameViewController.swift in Sources */,
 				8257A32824586CF5004641C6 /* StartPageViewController.swift in Sources */,
+				8298119D246269C4004DD06A /* BracketViewModel.swift in Sources */,
 				8257A32F24593505004641C6 /* BracketViewController.swift in Sources */,
 				8257A32524586C1E004641C6 /* LoginViewController.swift in Sources */,
 				8257A31B24576B83004641C6 /* LeaderboardsTableViewController.swift in Sources */,
 				8257A3332459B3C4004641C6 /* BracketTableViewCell.swift in Sources */,
 				8257A321245779A3004641C6 /* Player.swift in Sources */,
+				82065B192464F8EF00835449 /* GameViewModel.swift in Sources */,
 				8257A340245BC52D004641C6 /* JoinTournamentViewController.swift in Sources */,
 				8257A32D24592C70004641C6 /* BracketSetupViewController.swift in Sources */,
 				8257A31E24577540004641C6 /* LeaderboardsTableViewCell.swift in Sources */,

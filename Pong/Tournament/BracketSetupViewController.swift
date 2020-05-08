@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FirebaseFirestore
 import Firebase
 
 class BracketSetupViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
@@ -16,8 +15,10 @@ class BracketSetupViewController: UIViewController, UIPickerViewDelegate, UIPick
     var selectedPlayers = 4
     @IBOutlet weak var numPlayers: UIPickerView!
     @IBOutlet weak var goButton: UIButton!
-    var ref: DocumentReference? = nil
-    var db = Firestore.firestore()
+    let firebase = FirebaseService.shared
+    var games: [Game] = []
+    let defaults = UserDefaults()
+    var gameRefs: [DocumentReference] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +46,8 @@ class BracketSetupViewController: UIViewController, UIPickerViewDelegate, UIPick
     }
 
     @IBAction func goClicked(_ sender: Any) {
-        addToDatabase()
+        //initializeGames()
+        createTourneyWithHost()
         self.performSegue(withIdentifier: "goToBracket", sender: self)
     }
     
@@ -54,38 +56,45 @@ class BracketSetupViewController: UIViewController, UIPickerViewDelegate, UIPick
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let bracketVC = segue.destination as? BracketViewController else { return }
+        let tourneyID = firebase.docRef?.documentID ?? ""
+        let user = firebase.authentication?.currentUser?.uid ?? ""
         bracketVC.numPlayers = Double(selectedPlayers)
-        bracketVC.tourneyID = (ref!.documentID)
+        bracketVC.tourneyID = (tourneyID)
+        defaults.set(tourneyID, forKey: user)
     }
     
-    func addToDatabase() {
-        let host = Auth.auth().currentUser?.uid ?? ""
-        let playersRef = db.collection("users")
-        _ = playersRef.whereField("id", isEqualTo: host)
-            .getDocuments() { (querySnapshot, err) in
-                if let err = err {
-                    print("Error getting documents: \(err)")
-                } else {
-                    for document in querySnapshot!.documents {
-                        print("\(document.documentID) => \(document.data())")
-                    }
-                }
+    func createTourneyWithHost() {
+        let host = firebase.authentication?.currentUser?.uid ?? ""
+        for i in 0 ..< selectedPlayers/2 {
+            games.append(Game(id: "\(i)"))
         }
-        ref = db.collection("tournament").addDocument(data: [
+        for game in games {
+            let result = Result {
+                firebase.docRef = try firebase.gamesRef?.addDocument(from: game)
+            }
+            switch result {
+            case .success:
+                gameRefs.append(firebase.docRef!)
+                print("Game successfully added")
+            case .failure(let error):
+                print("Error encoding game: \(error)")
+            }
+        }
+        firebase.docRef = firebase.tournamentsRef?.addDocument(data: [
             "numPlayers": selectedPlayers,
+            "registeredPlayers": 1,
             "gamesPerRound": 1,
-            "host": playersRef.document(host),
-            "currentGames": [],
-            "players": [playersRef.document(host)],
+            "host": firebase.playersRef?.document(host) ?? "",
+            "games": gameRefs,
+            "players": [firebase.playersRef?.document(host)],
+            "tourneyFull": false
         ]) { err in
             if let err = err {
                 print("Error adding document: \(err)")
             } else {
-                print("Document added with ID: \(self.ref!.documentID)")
+                print("Document added with ID: \(String(describing: self.firebase.docRef?.documentID))")
             }
         }
-        
-        
     }
         
 }
