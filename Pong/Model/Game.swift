@@ -19,29 +19,47 @@ struct Game: Codable {
     var shotsRemaining: Int
     var p1TotalShots: Int
     var p2TotalShots: Int
+    var p1CupsHit: Int
+    var p2CupsHit: Int
+    var p1OnRedemption: Bool
+    var p2OnRedemption: Bool
+    var score: [Int]
     var winner: String
+    var isFinished: Bool
     
     init() {
         self.id = ""
         self.player1 = ""
         self.player2 = ""
         self.p1Turn = true
+        self.p1CupsHit = 0
+        self.p2CupsHit = 0
         self.ballsBack = false
         self.shotsRemaining = 2
         self.p1TotalShots = 0
         self.p2TotalShots = 0
+        self.p1OnRedemption = false
+        self.p2OnRedemption = false
+        self.score = [0, 0]
         self.winner = ""
+        self.isFinished = false
     }
     
     init(id: String) {
         self.id = id
         self.player1 = ""
         self.player2 = ""
+        self.p1CupsHit = 0
+        self.p2CupsHit = 0
         self.p1Turn = true
         self.ballsBack = false
         self.shotsRemaining = 2
         self.p1TotalShots = 0
         self.p2TotalShots = 0
+        self.p1OnRedemption = false
+        self.p2OnRedemption = false
+        self.score = [0, 0]
         self.winner = ""
+        self.isFinished = false
     }
 }

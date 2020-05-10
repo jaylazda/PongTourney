@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		82065B192464F8EF00835449 /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82065B182464F8EF00835449 /* GameViewModel.swift */; };
+		82065B1B24685F2A00835449 /* WinnerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82065B1A24685F2A00835449 /* WinnerViewController.swift */; };
 		8227C8AF245F3D51005D3301 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8227C8AE245F3D51005D3301 /* FirebaseService.swift */; };
 		8257A303245760B8004641C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8257A302245760B8004641C6 /* AppDelegate.swift */; };
 		8257A305245760B8004641C6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8257A304245760B8004641C6 /* SceneDelegate.swift */; };
@@ -39,6 +40,7 @@
 
 /* Begin PBXFileReference section */
 		82065B182464F8EF00835449 /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
+		82065B1A24685F2A00835449 /* WinnerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WinnerViewController.swift; sourceTree = "<group>"; };
 		8227C8AE245F3D51005D3301 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		8257A2FF245760B8004641C6 /* Pong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pong.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8257A302245760B8004641C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				8257A335245A4126004641C6 /* GameViewController.swift */,
+				82065B1A24685F2A00835449 /* WinnerViewController.swift */,
 				82065B182464F8EF00835449 /* GameViewModel.swift */,
 			);
 			path = Game;
@@ -349,6 +352,7 @@
 				8257A340245BC52D004641C6 /* JoinTournamentViewController.swift in Sources */,
 				8257A32D24592C70004641C6 /* BracketSetupViewController.swift in Sources */,
 				8257A31E24577540004641C6 /* LeaderboardsTableViewCell.swift in Sources */,
+				82065B1B24685F2A00835449 /* WinnerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

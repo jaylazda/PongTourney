@@ -22,17 +22,10 @@ class GameViewModel {
         self.gameID = gameID
         fetchGameData(gameID) { game in
             self.gameData = game
-            print("Game \(game.id) initialized")
+            print("Game \(game.id) updated")
         }
         self.players = players
         print(players)
-//        for playerID in playerIDs {
-//            fetchPlayerData(playerID) { player in
-//                self.players.append(player)
-//                print(player)
-//                print("Player \(player.firstName) initialized")
-//            }
-//        }
     }
     
     func fetchGameData(_ gameID: String, queue: DispatchQueue = .main, completionHandler: @escaping (_ gameData: Game) -> Void) {
@@ -91,40 +84,98 @@ class GameViewModel {
             }
     }
     
-    func playerShotMissed(player: Player) {
-        gameData?.shotsRemaining -= 1
-        if player.id == players[0].id {
-            gameData?.p1TotalShots += 1
-            if (gameData?.shotsRemaining) == 0 {
-                gameData?.shotsRemaining = 2
-                gameData?.p1Turn = false
+    // Removes a shot fromthe VC and adds a shot to the player total
+    func playerDidShoot(player: Player) {
+        if var gameData = gameData {
+            gameData.shotsRemaining -= 1
+            if player.id == players[0].id {
+                gameData.p1TotalShots += 1
+            } else if player.id == players[1].id {
+                gameData.p2TotalShots += 1
             }
-        } else if player.id == players[1].id {
-            gameData?.p2TotalShots += 1
-            if (gameData?.shotsRemaining) == 0 {
-                gameData?.shotsRemaining = 2
-                gameData?.p1Turn = true
-            }
+            firebase.gamesRef?.document(gameID).updateData([
+                "shotsRemaining": gameData.shotsRemaining,
+                "p1TotalShots": gameData.p1TotalShots,
+                "p2TotalShots": gameData.p2TotalShots
+            ])
         }
     }
     
     //set cup to true, add 1 shot to game, if last shot, switch turns
     func playerShotScored(cupHit: Int, player: Player) {
-        gameData?.shotsRemaining -= 1
-        if player.id == players[0].id {
-            gameData?.p1TotalShots += 1
-            gameData?.p1CupsLeft[cupHit] = true
-            if (gameData?.shotsRemaining) == 0 {
-                gameData?.shotsRemaining = 2
-                gameData?.p1Turn = false
+        if var gameData = gameData {
+            if player.id == players[0].id {
+                gameData.p1OnRedemption = false
+                gameData.p1CupsHit += 1
+                if gameData.p1CupsHit >= 6 { //P2 redemption
+                    gameData.p2OnRedemption = true
+                    gameData.p1Turn = false
+                    gameData.shotsRemaining = 2
+                } else {
+                    gameData.score[0] += 1
+                    gameData.p1CupsLeft[cupHit] = true
+                }
+                firebase.gamesRef?.document(gameID).updateData([
+                    "p1CupsLeft": gameData.p1CupsLeft,
+                    "p1CupsHit": gameData.p1CupsHit,
+                    "p1OnRedemption": gameData.p1OnRedemption,
+                    "p2OnRedemption": gameData.p2OnRedemption,
+                    "p1Turn": gameData.p1Turn,
+                    "shotsRemaining": gameData.shotsRemaining,
+                    "score": gameData.score
+                ])
+            } else if player.id == players[1].id {
+                gameData.p2OnRedemption = false
+                gameData.p2CupsHit += 1
+                if gameData.p2CupsHit >= 6 {
+                    gameData.p1OnRedemption = true
+                    gameData.p1Turn = true
+                    gameData.shotsRemaining = 2
+                } else {
+                    gameData.score[1] += 1
+                    gameData.p2CupsLeft[cupHit] = true
+                }
+                firebase.gamesRef?.document(gameID).updateData([
+                    "p2CupsLeft": gameData.p2CupsLeft,
+                    "p2CupsHit": gameData.p2CupsHit,
+                    "p1OnRedemption": gameData.p1OnRedemption,
+                    "p2OnRedemption": gameData.p2OnRedemption,
+                    "p1Turn": gameData.p1Turn,
+                    "shotsRemaining": gameData.shotsRemaining,
+                    "score": gameData.score
+                ])
             }
-        } else if player.id == players[1].id {
-            gameData?.p2TotalShots += 1
-            gameData?.p2CupsLeft[cupHit] = true
-            if (gameData?.shotsRemaining) == 0 {
-                gameData?.shotsRemaining = 2
-                gameData?.p1Turn = true
+        }
+    }
+    
+    func playerTurnFinished(player: Player) {
+        if var gameData = gameData {
+            gameData.shotsRemaining = 2
+            if player.id == players[0].id {
+                gameData.p1Turn = false
+                if gameData.p1OnRedemption {
+                    gameData.winner = players[1].id
+                    gameData.isFinished = true 
+                    gameData.p2CupsLeft = [true, true, true, true, true, true]
+                    gameData.score[1] = 6
+                }
+            } else {
+                gameData.p1Turn = true
+                if gameData.p2OnRedemption {
+                    gameData.winner = players[0].id
+                    gameData.isFinished = true
+                    gameData.p1CupsLeft = [true, true, true, true, true, true]
+                    gameData.score[0] = 6
+                }
             }
+            firebase.gamesRef?.document(gameID).updateData([
+                "shotsRemaining": gameData.shotsRemaining,
+                "p1Turn": gameData.p1Turn,
+                "winner": gameData.winner,
+                "p1CupsLeft": gameData.p1CupsLeft,
+                "p2CupsLeft": gameData.p2CupsLeft,
+                "score": gameData.score
+            ])
         }
     }
 }

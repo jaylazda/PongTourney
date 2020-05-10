@@ -7,11 +7,28 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
 struct Tournament: Codable {
+    var currentRound: Int
+    var games: [DocumentReference]
     var numPlayers: Int
-    var players: [Player]
-    var host: Player
+    var registeredPlayers: Int
+    var roundFinished: Bool
+    var players: [DocumentReference]
+    var host: DocumentReference?
     var gamesPerRound: Int
-    var currentGames: [Game]
+    var tourneyFull: Bool
+    
+    init() {
+        self.currentRound = 1
+        self.games = []
+        self.numPlayers = 0
+        self.registeredPlayers = 0
+        self.roundFinished = false
+        self.players = []
+        self.host = nil
+        self.gamesPerRound = 0
+        self.tourneyFull = false
+    }
 }

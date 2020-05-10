@@ -22,6 +22,7 @@ class FirebaseService {
     var docRef: DocumentReference? = nil
     var authentication: Auth? = nil
     var playerIDs: [String] = []
+    var tournamentData = Tournament()
     
     init() {
         playersRef = db.collection("users")
@@ -87,13 +88,27 @@ class FirebaseService {
         }
     }
     
-    func fetchTournamentPlayerIDs(_ tourneyID: String, queue: DispatchQueue = .main, completionHandler: @escaping (_ playerIDs: [String]) -> Void) {
+    func fetchTournamentDataAndPlayerIDs(_ tourneyID: String, queue: DispatchQueue = .main, completionHandler: @escaping (_ tourneyData: Tournament,_ playerIDs: [String]) -> Void) {
         tournamentsRef?.document(tourneyID)
             .addSnapshotListener { documentSnapshot, error in
                 self.playerIDs = []
                 guard let document = documentSnapshot else {
                     print("Error fetching document \(error!)")
                     return
+                }
+                let result = Result {
+                     try document.data(as: Tournament.self)
+                 }
+                 switch result {
+                 case .success(let tourney):
+                     if let tourney = tourney {
+                        self.tournamentData = tourney
+                        print(self.tournamentData)
+                     } else {
+                         print("Tournament is empty")
+                     }
+                 case .failure(let error):
+                     print("Error decoding tournament: \(error)")
                 }
                 guard let playerArray = document.get("players") as? [DocumentReference] else {
                     print("Error getting player references")
@@ -108,14 +123,14 @@ class FirebaseService {
                     }
                 }
                 queue.async {
-                    completionHandler(self.playerIDs)
+                    completionHandler(self.tournamentData, self.playerIDs)
                 }
             }
     }
     
-    func fetchTournamentPlayerData(_ tourneyID: String, queue: DispatchQueue = .main, completionHandler: @escaping (_ playerList: [Player]) -> Void) {
+    func fetchTournamentDataAndPlayerData(_ tourneyID: String, queue: DispatchQueue = .main, completionHandler: @escaping (_ tourneyData: Tournament,_ playerList: [Player]) -> Void) {
         self.playerIDs = []
-        fetchTournamentPlayerIDs(tourneyID) { playerDocIDs in
+        fetchTournamentDataAndPlayerIDs(tourneyID) { tournamentData, playerDocIDs in
             var playerList: [Player] = []
             for id in self.playerIDs {
                 print(id)
@@ -143,7 +158,7 @@ class FirebaseService {
                         }
                     }
                         queue.async {
-                            completionHandler(playerList)
+                            completionHandler(tournamentData, playerList)
                         }
                 }
             }
@@ -167,6 +182,33 @@ class FirebaseService {
                 }
                 queue.async {
                     completionHandler(gameIDs)
+                }
+            }
+    }
+    
+    func fetchGameData(_ gameID: String, queue: DispatchQueue = .main, completionHandler: @escaping (_ gameData: Game) -> Void) {
+        gamesRef?.document(gameID)
+            .addSnapshotListener() { (documentSnapshot, error) in
+                var gameData = Game()
+                guard let document = documentSnapshot else {
+                    print("Error fetching document: \(error!)")
+                    return
+                }
+                let result = Result {
+                    try document.data(as: Game.self)
+                }
+                switch result {
+                case .success(let game):
+                    if let game = game {
+                        gameData = game
+                    } else {
+                        print("Game is empty")
+                    }
+                case .failure(let error):
+                    print("Error decoding game: \(error)")
+                }
+                queue.async {
+                    completionHandler(gameData)
                 }
             }
     }
@@ -208,4 +250,5 @@ class FirebaseService {
             }
         }
     }
+    
 }

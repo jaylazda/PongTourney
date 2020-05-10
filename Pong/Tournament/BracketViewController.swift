@@ -18,7 +18,10 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
     var playerList: [[Player]] = [[],[],[],[],[]]
     var playerDocIDs: [String] = []
     var firebase = FirebaseService.shared
-    var firstRoundGameIDs: [String] = []
+    var allGameIDs: [[String]] = [[],[],[],[],[]]
+    var allGames: [[Game]] = [[],[],[],[],[]]
+    var winnerIDs: [String] = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
+    var tourneyData = Tournament()
     var gamesCreated = false
 
     @IBOutlet weak var leaveTourneyButton: UIButton!
@@ -31,19 +34,14 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        firebase.fetchTournamentPlayerData(tourneyID) { players in
-            self.playerList[0] = players
-            self.tableView.reloadData()
-        }
-        firebase.fetchTournamentGameIDs(tourneyID) { gameIDs in
-            self.firstRoundGameIDs = gameIDs
-            print(self.firstRoundGameIDs)
-        }
-        
         visiblePlayers = Int(numPlayers)
         segments.removeAllSegments()
         addSegments()
         segments.selectedSegmentIndex = 0
+        for i in 0 ..< segments.numberOfSegments {
+            let numGames = Int(numPlayers/(pow(2.0, Double(i))))/2
+            allGames[i] = Array(repeating: Game(), count: numGames)
+        }
         leaveTourneyButton.layer.cornerRadius = 25
         defaults.set(numPlayers, forKey: "numPlayers")
         idLabel.text = "Tournament ID: \(tourneyID)"
@@ -51,11 +49,46 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.dataSource = self
         let nib = UINib(nibName: "BracketTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "bracketCell")
-        //Get player from db with current user id and add to playerlist
-        
-        // Do any additional setup after loading the view.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let seg = segments.selectedSegmentIndex
+        firebase.fetchTournamentDataAndPlayerData(tourneyID) { tourneyData, players in
+            self.tourneyData = tourneyData
+            self.playerList[0] = players
+            self.tableView.reloadData()
+        }
+        firebase.fetchTournamentGameIDs(tourneyID) { gameIDs in
+            self.allGameIDs[seg] = gameIDs
+            print(self.allGameIDs)
+            self.reloadGameData()
+        }
+    }
+    
+    func reloadGameData() {
+        var roundFinished = true
+        let seg = segments.selectedSegmentIndex
+        for (index, gameID) in allGameIDs[seg].enumerated() {
+            self.firebase.fetchGameData(gameID) { gameData in
+                self.allGames[seg][index] = gameData
+                if !gameData.isFinished {
+                    roundFinished = false
+                } else {
+                    self.winnerIDs[index] = gameData.winner
+                    print("WINNERS:\(self.winnerIDs)")
+                }
+                self.tableView.reloadData()
+            }
+        }
+        if roundFinished {
+            
+        }
+        firebase.tournamentsRef?.document(tourneyID).updateData([
+            "roundFinished": roundFinished, // TODO: initialize next round of winners
+            "currentRound": tourneyData.currentRound+1 //dont need here
+        ])
+    }
     @IBAction func segmentChanged(_ sender: Any) {
         let index = segments.selectedSegmentIndex
         if index != 0 {
@@ -99,9 +132,9 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let seg = segments.selectedSegmentIndex
         let cell = tableView.dequeueReusableCell(withIdentifier: "bracketCell") as! BracketTableViewCell
-        if playerList[seg].indices.contains(indexPath.row + (2*indexPath.section)) {
+        if playerList[seg].indices.contains(indexPath.row + (2*indexPath.section)) && allGames[seg].indices.contains(indexPath.section){
             cell.name.text = playerList[seg][indexPath.row + (2*indexPath.section)].firstName
-            cell.cupsHit.text = "0"
+            cell.cupsHit.text = String(allGames[seg][indexPath.section].score[indexPath.row])
         } else {
             cell.name.text = "TBD"
             cell.cupsHit.text = "0"
@@ -127,7 +160,12 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let seg = segments.selectedSegmentIndex
         if playerList[seg].indices.contains(2*indexPath.section) && playerList[seg].indices.contains(1+2*indexPath.section){
-            self.performSegue(withIdentifier: "goToGame", sender: self)
+            let userID = firebase.authentication?.currentUser?.uid
+            let player1ID = playerList[seg][2*indexPath.section].id
+            let player2ID = playerList[seg][1+2*indexPath.section].id
+            if  player1ID == userID || player2ID == userID {
+                self.performSegue(withIdentifier: "goToGame", sender: self)
+            }
         }
     }
     
@@ -138,7 +176,7 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
             gameVC.player1Name = playerList[seg][2*indexPath.section].firstName // NOT NECESSARY ANYMORE PASSING IN PLAYERS
             gameVC.player2Name = playerList[seg][1 + (2*indexPath.section)].firstName
             gameVC.players = [playerList[seg][2*indexPath.section], playerList[seg][1 + (2*indexPath.section)]]
-            gameVC.gameID = firstRoundGameIDs[indexPath.section]
+            gameVC.gameID = allGameIDs[seg][indexPath.section]
         }
     }
     

@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import FirebaseFirestore
 
 class BracketSetupViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
@@ -59,13 +60,13 @@ class BracketSetupViewController: UIViewController, UIPickerViewDelegate, UIPick
         let tourneyID = firebase.docRef?.documentID ?? ""
         let user = firebase.authentication?.currentUser?.uid ?? ""
         bracketVC.numPlayers = Double(selectedPlayers)
-        bracketVC.tourneyID = (tourneyID)
+        bracketVC.tourneyID = tourneyID
         defaults.set(tourneyID, forKey: user)
     }
     
     func createTourneyWithHost() {
         let host = firebase.authentication?.currentUser?.uid ?? ""
-        for i in 0 ..< selectedPlayers/2 {
+        for i in 0 ..< selectedPlayers-1     {
             games.append(Game(id: "\(i)"))
         }
         for game in games {
@@ -87,7 +88,9 @@ class BracketSetupViewController: UIViewController, UIPickerViewDelegate, UIPick
             "host": firebase.playersRef?.document(host) ?? "",
             "games": gameRefs,
             "players": [firebase.playersRef?.document(host)],
-            "tourneyFull": false
+            "tourneyFull": false,
+            "currentRound": 1,
+            "roundFinished": false
         ]) { err in
             if let err = err {
                 print("Error adding document: \(err)")
