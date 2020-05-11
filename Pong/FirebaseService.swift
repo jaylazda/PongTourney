@@ -23,6 +23,7 @@ class FirebaseService {
     var authentication: Auth? = nil
     var playerIDs: [String] = []
     var tournamentData = Tournament()
+    var winners: [[String]] = [[], [], [], [], []]
     
     init() {
         playersRef = db.collection("users")
@@ -117,6 +118,7 @@ class FirebaseService {
                 for player in playerArray.reversed() {
                     self.playerIDs.append(player.documentID)
                 }
+                
                 if document.get("tourneyFull") as! Bool {
                     self.addPlayersToGames(tourneyID) {
                         print("Added players to games")
@@ -165,20 +167,24 @@ class FirebaseService {
         }
     }
     
-    func fetchTournamentGameIDs(_ tourneyID: String, queue: DispatchQueue = .main, completionHandler: @escaping (_ gameIDs: [String]) -> Void) {
+    //GET R1,R2,R3,R4,R5 and add to 2d array gameIDs
+    func fetchTournamentGameIDs(_ tourneyID: String, queue: DispatchQueue = .main, completionHandler: @escaping (_ gameIDs: [[String]]) -> Void) {
         tournamentsRef?.document(tourneyID)
             .getDocument() { (documentSnapshot, err) in
-                var gameIDs: [String] = []
+                var gameIDs: [[String]] = [[], [], [], [], []]
                 guard let document = documentSnapshot else {
                     print("Error fetching document \(err!)")
                     return
                 }
-                guard let gameArray = document.get("games") as? [DocumentReference] else {
-                    print("Error getting game references")
-                    return
-                }
-                for game in gameArray {
-                    gameIDs.append(game.documentID)
+                for i in 0 ..< 2 { //change!!!!!!!!!!!!!!!!
+                    print("I is \(i)")
+                    guard let gameArray = document.get("r\(i+1)Games") as? [DocumentReference] else {
+                        print("Error getting game references")
+                        return
+                    }
+                    for game in gameArray {
+                        gameIDs[i].append(game.documentID)
+                    }
                 }
                 queue.async {
                     completionHandler(gameIDs)
@@ -213,40 +219,80 @@ class FirebaseService {
             }
     }
     
-    func addPlayersToGames(_ tourneyID: String, queue: DispatchQueue = .main, completionHandler: @escaping () -> Void) {
-        fetchTournamentGameIDs(tourneyID) { gameIDs in
-            var games: [Game] = []
-            for (index, game) in gameIDs.enumerated() {
-                self.docRef = self.gamesRef?.document(game)
-                print(game)
-                print(self.playerIDs[2*index])
-                print(self.playerIDs[2*index+1])
-                self.docRef?.updateData([
-                    "player1": self.playerIDs[2*index],
-                    "player2": self.playerIDs[2*index+1]
-                ])
-                self.docRef?.getDocument() { document, error in
-                    if let error = error {
-                        print("Error getting document: \(error)")
+    func fetchGameDataNoListener(_ gameID: String, queue: DispatchQueue = .main, completionHandler: @escaping (_ gameData: Game) -> Void) {
+        gamesRef?.document(gameID)
+        .getDocument() { (documentSnapshot, error) in
+                var gameData = Game()
+                guard let document = documentSnapshot else {
+                    print("Error fetching document: \(error!)")
+                    return
+                }
+                let result = Result {
+                    try document.data(as: Game.self)
+                }
+                switch result {
+                case .success(let game):
+                    if let game = game {
+                        gameData = game
                     } else {
-                        let result = Result {
-                            try document?.data(as: Game.self)
-                        }
-                        switch result {
-                        case .success(let game):
-                            if let game = game {
-                                games.append(game)
-                            } else {
-                                print("Game is empty")
-                            }
-                        case .failure(let error):
-                            print("Error decoding game: \(error)")
-                           }
+                        print("Game is empty")
                     }
+                case .failure(let error):
+                    print("Error decoding game: \(error)")
+                }
+                queue.async {
+                    completionHandler(gameData)
                 }
             }
+    }
+    
+    func addPlayersToGames(_ tourneyID: String, queue: DispatchQueue = .main, completionHandler: @escaping () -> Void) {
+        fetchTournamentGameIDs(tourneyID) { gameIDs in
+            self.winners = [Array(repeating: "", count: 16), Array(repeating: "", count: 8), Array(repeating: "", count: 4), ["", ""], [""]]
+            self.updatePlayersForRound(1, gameIDs[0])
+            self.updatePlayersForRound(2, gameIDs[1])
+            self.updatePlayersForRound(3, gameIDs[2])
+            self.updatePlayersForRound(4, gameIDs[3])
+            self.updatePlayersForRound(5, gameIDs[4])
             queue.async {
                 completionHandler()
+            }
+        }
+    }
+    
+    func updateWinners(_ round: Int,_ roundGameIDs: [String], completionHandler: @escaping () -> Void) {
+        let myGroup = DispatchGroup()
+        for (index, gameID) in roundGameIDs.enumerated() {
+            print(gameID)
+            myGroup.enter()
+            self.fetchGameDataNoListener(gameID) { gameData in
+                print("winner of game \(gameData.id) \(gameData.winner)")
+                self.winners[round-1][index] = gameData.winner
+                myGroup.leave()
+            }
+        }
+        myGroup.notify(queue: .main) {
+            completionHandler()
+        }
+    }
+    
+    func updatePlayersForRound(_ round: Int,_ roundGameIDs: [String]) {
+        self.updateWinners(round, roundGameIDs) {
+            for (index, gameID) in roundGameIDs.enumerated() {
+                let gameRef = self.gamesRef?.document(gameID)
+                if round == 1 {
+                    gameRef?.updateData([
+                        "player1": self.playerIDs[2*index],
+                        "player2": self.playerIDs[2*index+1]
+                    ])
+                } else {
+                    print("winners: \(self.winners)")
+                    print(self.winners[round-2][2*index])
+                    gameRef?.updateData([
+                        "player1": self.winners[round-2][2*index],
+                        "player2": self.winners[round-2][2*index+1]
+                    ])
+                }
             }
         }
     }

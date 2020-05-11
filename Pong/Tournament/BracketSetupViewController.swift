@@ -17,9 +17,9 @@ class BracketSetupViewController: UIViewController, UIPickerViewDelegate, UIPick
     @IBOutlet weak var numPlayers: UIPickerView!
     @IBOutlet weak var goButton: UIButton!
     let firebase = FirebaseService.shared
-    var games: [Game] = []
+    var games: [[Game]] = [[], [], [], [], []]
     let defaults = UserDefaults()
-    var gameRefs: [DocumentReference] = []
+    var gameRefs: [[DocumentReference]] = [[], [], [], [], []]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,27 +66,50 @@ class BracketSetupViewController: UIViewController, UIPickerViewDelegate, UIPick
     
     func createTourneyWithHost() {
         let host = firebase.authentication?.currentUser?.uid ?? ""
-        for i in 0 ..< selectedPlayers-1     {
-            games.append(Game(id: "\(i)"))
+        let num = selectedPlayers
+        for i in 0 ..< num-1     {
+            switch i {
+            case let i where i < num/2:
+                games[0].append(Game(id: "\(i)"))
+            case let i where i < (num - num/4):
+                games[1].append(Game(id: "\(i)"))
+            case let i where i < (num - num/8):
+                games[2].append(Game(id: "\(i)"))
+            case let i where i < (num - num/16):
+                games[3].append(Game(id: "\(i)"))
+            case let i where i < (num - num/32):
+                games[4].append(Game(id: "\(i)"))
+            default:
+                break
+            }
+            
         }
-        for game in games {
-            let result = Result {
-                firebase.docRef = try firebase.gamesRef?.addDocument(from: game)
+        var index = 0
+        for rounds in games {
+            for game in rounds {
+                let result = Result {
+                    firebase.docRef = try firebase.gamesRef?.addDocument(from: game)
+                }
+                switch result {
+                case .success:
+                    gameRefs[index].append(firebase.docRef!)
+                    print("Game successfully added")
+                case .failure(let error):
+                    print("Error encoding game: \(error)")
+                }
             }
-            switch result {
-            case .success:
-                gameRefs.append(firebase.docRef!)
-                print("Game successfully added")
-            case .failure(let error):
-                print("Error encoding game: \(error)")
-            }
+            index += 1
         }
         firebase.docRef = firebase.tournamentsRef?.addDocument(data: [
             "numPlayers": selectedPlayers,
             "registeredPlayers": 1,
             "gamesPerRound": 1,
             "host": firebase.playersRef?.document(host) ?? "",
-            "games": gameRefs,
+            "r1Games": gameRefs[0],
+            "r2Games": gameRefs[1],
+            "r3Games": gameRefs[2],
+            "r4Games": gameRefs[3],
+            "r5Games": gameRefs[4],
             "players": [firebase.playersRef?.document(host)],
             "tourneyFull": false,
             "currentRound": 1,

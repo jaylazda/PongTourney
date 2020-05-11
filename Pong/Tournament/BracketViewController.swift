@@ -56,11 +56,12 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
         let seg = segments.selectedSegmentIndex
         firebase.fetchTournamentDataAndPlayerData(tourneyID) { tourneyData, players in
             self.tourneyData = tourneyData
+            print("PLAYERS \(players)")
             self.playerList[0] = players
             self.tableView.reloadData()
         }
         firebase.fetchTournamentGameIDs(tourneyID) { gameIDs in
-            self.allGameIDs[seg] = gameIDs
+            self.allGameIDs = gameIDs
             print(self.allGameIDs)
             self.reloadGameData()
         }
@@ -69,9 +70,11 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
     func reloadGameData() {
         var roundFinished = true
         let seg = segments.selectedSegmentIndex
+        print(allGameIDs)
         for (index, gameID) in allGameIDs[seg].enumerated() {
             self.firebase.fetchGameData(gameID) { gameData in
                 self.allGames[seg][index] = gameData
+                print(self.allGames[seg])
                 if !gameData.isFinished {
                     roundFinished = false
                 } else {
@@ -97,6 +100,7 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
             visiblePlayers = Int(numPlayers)
         }
         tableView.reloadData()
+        self.reloadGameData()
     }
     
     @IBAction func leaveTourneyClicked(_ sender: Any) {
@@ -132,13 +136,27 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let seg = segments.selectedSegmentIndex
         let cell = tableView.dequeueReusableCell(withIdentifier: "bracketCell") as! BracketTableViewCell
-        if playerList[seg].indices.contains(indexPath.row + (2*indexPath.section)) && allGames[seg].indices.contains(indexPath.section){
-            cell.name.text = playerList[seg][indexPath.row + (2*indexPath.section)].firstName
-            cell.cupsHit.text = String(allGames[seg][indexPath.section].score[indexPath.row])
+        if indexPath.row == 0 {
+            if let player = playerList[0].first(where: {$0.id == allGames[seg][indexPath.section].player1}) {
+                cell.name.text = player.firstName
+            } else {
+                cell.name.text = "TBD"
+            }
         } else {
-            cell.name.text = "TBD"
-            cell.cupsHit.text = "0"
+            if let player = playerList[0].first(where: {$0.id == allGames[seg][indexPath.section].player2}) {
+                cell.name.text = player.firstName
+            } else {
+                cell.name.text = "TBD"
+            }
         }
+        cell.cupsHit.text = String(allGames[seg][indexPath.section].score[indexPath.row])
+//        if playerList[seg].indices.contains(indexPath.row + (2*indexPath.section)) && allGames[seg].indices.contains(indexPath.section){
+//            cell.name.text = playerList[seg][indexPath.row + (2*indexPath.section)].firstName
+//
+//        } else {
+//            cell.name.text = "TBD"
+//            cell.cupsHit.text = "0"
+//        }
         return cell
     }
     
@@ -183,3 +201,4 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
 }
 
 
+ 
