@@ -4,43 +4,43 @@ yourself with friends.
 Screenshots of the app are located in the PongScreenShots Folder.
 *** Note: This app is not complete, it's still being developed and hasn't been released on the app store yet. ***
 
-Getting Started
+Getting Started:
 Clone the project and open in Xcode. So far only tested on iPhone 11 Pro Max.
 
-Prerequisites
+Prerequisites:
 MacOS
 Xcode
 
-Setting up an account
+Setting up an account:
 First you must sign up in the app after which you will be directed to the home page.
 Same goes for logging in.
 
-Creating a tournament
+Creating a tournament:
 From the home page, select "Tournament" then "Set Up Tournament".
 Select number of desired players and click "Go"
 To join a tournament, you need the tournament ID which will be provided by the host.
 From the home page, select "Tournament" then "Join Tournament".
 
-Tournament Games
+Tournament Games:
 Games can only be started once the tournament is full. Click on the row with your name on it to start your game.
 Essentially, you mirror your real life shots/hits/misses by clicking the different buttons. 
 Select which cups you hit and if you win you move on to the next round.
 
-Leaderboards
+Leaderboards:
 Still in development, will display all your friends stats upon completion.
 
-My Stats
+My Stats:
 Still in development, will show your stats and your most recent games.
 
-Single Game
+Single Game:
 Still in development, will let users play a game without creating a tournament.
 
-Built With
+Built With:
 Swift
 Firebase (Authentication and Cloud Firestore database)
 
-Authors
+Author:
 Jacob Lazda 
 
-Acknowledgments
+Acknowledgments:
 Thanks to being in quarantine which gave me a lot of free time to do this!
