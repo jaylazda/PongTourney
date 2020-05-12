@@ -74,6 +74,12 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
         for (index, gameID) in allGameIDs[seg].enumerated() {
             self.firebase.fetchGameData(gameID) { gameData in
                 self.allGames[seg][index] = gameData
+                if let player = self.playerList[seg-1].first(where: {$0.id == self.allGames[seg][index].player1}) {
+                    self.playerList[seg].append(player)
+                }
+                if let player = self.playerList[seg-1].first(where: {$0.id == self.allGames[seg][index].player2}) {
+                    self.playerList[seg].append(player)
+                }
                 print(self.allGames[seg])
                 if !gameData.isFinished {
                     roundFinished = false

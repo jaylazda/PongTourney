@@ -109,7 +109,7 @@
                                     <constraint firstAttribute="height" constant="55" id="Uk0-ah-YWp"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
-                                <state key="normal">
+                                <state key="normal" title="My Stats">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
@@ -123,7 +123,7 @@
                                     <constraint firstAttribute="height" constant="55" id="8IN-xn-Uxt"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
-                                <state key="normal" title="Start Game">
+                                <state key="normal" title="Single Game">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
@@ -1352,7 +1352,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="10y-O4-e89"/>
+        <segue reference="OYH-2t-POd"/>
         <segue reference="n4H-Us-ItC"/>
     </inferredMetricsTieBreakers>
     <resources>
