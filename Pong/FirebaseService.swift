@@ -176,7 +176,12 @@ class FirebaseService {
                     print("Error fetching document \(err!)")
                     return
                 }
-                for i in 0 ..< 2 { //change!!!!!!!!!!!!!!!!
+                var rounds = 1
+                guard let numPlayers = document.get("numPlayers") as? Int else {
+                    return
+                }
+                rounds = Int(log2(Double(numPlayers)))
+                for i in 0 ..< rounds {
                     print("I is \(i)")
                     guard let gameArray = document.get("r\(i+1)Games") as? [DocumentReference] else {
                         print("Error getting game references")

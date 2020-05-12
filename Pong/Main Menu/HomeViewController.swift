@@ -28,7 +28,7 @@ class HomeViewController: UIViewController {
         startGameButton.layer.cornerRadius = 25
         logoutButton.layer.cornerRadius = 25
         getAllPlayers()
-        //defaults.removeObject(forKey: user)
+        defaults.removeObject(forKey: user)
     }
 
     override func viewWillAppear(_ animated: Bool) {

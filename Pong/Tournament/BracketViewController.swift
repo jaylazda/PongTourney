@@ -20,17 +20,17 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
     var firebase = FirebaseService.shared
     var allGameIDs: [[String]] = [[],[],[],[],[]]
     var allGames: [[Game]] = [[],[],[],[],[]]
-    var winnerIDs: [String] = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
     var tourneyData = Tournament()
     var gamesCreated = false
-
+    let segTitles = ["Final", "Semifinal", "Quarterfinal", "16", "32"]
+    let defaults = UserDefaults()
+    
     @IBOutlet weak var leaveTourneyButton: UIButton!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var idLabel: UILabel!
     @IBOutlet weak var segments: UISegmentedControl!
     @IBOutlet weak var tableView: UITableView!
-    let segTitles = ["Final", "Semifinal", "Quarterfinal", "16", "32"]
-    let defaults = UserDefaults()
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,18 +74,15 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
         for (index, gameID) in allGameIDs[seg].enumerated() {
             self.firebase.fetchGameData(gameID) { gameData in
                 self.allGames[seg][index] = gameData
-                if let player = self.playerList[seg-1].first(where: {$0.id == self.allGames[seg][index].player1}) {
+                if let player = self.playerList[seg].first(where: {$0.id == self.allGames[seg][index].player1}) {
                     self.playerList[seg].append(player)
                 }
-                if let player = self.playerList[seg-1].first(where: {$0.id == self.allGames[seg][index].player2}) {
+                if let player = self.playerList[seg].first(where: {$0.id == self.allGames[seg][index].player2}) {
                     self.playerList[seg].append(player)
                 }
                 print(self.allGames[seg])
                 if !gameData.isFinished {
                     roundFinished = false
-                } else {
-                    self.winnerIDs[index] = gameData.winner
-                    print("WINNERS:\(self.winnerIDs)")
                 }
                 self.tableView.reloadData()
             }
@@ -156,13 +153,6 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
         }
         cell.cupsHit.text = String(allGames[seg][indexPath.section].score[indexPath.row])
-//        if playerList[seg].indices.contains(indexPath.row + (2*indexPath.section)) && allGames[seg].indices.contains(indexPath.section){
-//            cell.name.text = playerList[seg][indexPath.row + (2*indexPath.section)].firstName
-//
-//        } else {
-//            cell.name.text = "TBD"
-//            cell.cupsHit.text = "0"
-//        }
         return cell
     }
     
@@ -183,10 +173,11 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let seg = segments.selectedSegmentIndex
-        if playerList[seg].indices.contains(2*indexPath.section) && playerList[seg].indices.contains(1+2*indexPath.section){
+        print(allGames[seg])
+        if allGames[seg].indices.contains(indexPath.section) {
             let userID = firebase.authentication?.currentUser?.uid
-            let player1ID = playerList[seg][2*indexPath.section].id
-            let player2ID = playerList[seg][1+2*indexPath.section].id
+            let player1ID = allGames[seg][indexPath.section].player1
+            let player2ID = allGames[seg][indexPath.section].player2
             if  player1ID == userID || player2ID == userID {
                 self.performSegue(withIdentifier: "goToGame", sender: self)
             }
@@ -197,9 +188,13 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
         let seg = segments.selectedSegmentIndex
         guard let gameVC = segue.destination as? GameViewController else { return }
         if let indexPath = self.tableView.indexPathForSelectedRow {
-            gameVC.player1Name = playerList[seg][2*indexPath.section].firstName // NOT NECESSARY ANYMORE PASSING IN PLAYERS
-            gameVC.player2Name = playerList[seg][1 + (2*indexPath.section)].firstName
-            gameVC.players = [playerList[seg][2*indexPath.section], playerList[seg][1 + (2*indexPath.section)]]
+            if let player1 = playerList[0].first(where: {$0.id == allGames[seg][indexPath.section].player1}) {
+                if let player2 = playerList[0].first(where: {$0.id == allGames[seg][indexPath.section].player2}) {
+                    gameVC.players = [player1, player2]
+                    gameVC.player1Name = player1.firstName
+                    gameVC.player2Name = player2.firstName
+                }
+            }
             gameVC.gameID = allGameIDs[seg][indexPath.section]
         }
     }
