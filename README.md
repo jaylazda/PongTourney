@@ -1,6 +1,7 @@
 Pong Tourney
 iOS app built to create and host beer pong tournaments with live game stat tracking and leaderboards to compare
 yourself with friends.
+Screenshots of the app are located in the PongScreenShots Folder.
 *** Note: This app is not complete, it's still being developed and hasn't been released on the app store yet. ***
 
 Getting Started
