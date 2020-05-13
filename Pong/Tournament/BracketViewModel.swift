@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Firebase
 
 class BracketViewModel {
     
@@ -16,6 +17,7 @@ class BracketViewModel {
     var totalPlayers = 0
     var playerList: [Player] = []
     var allGames: [[Game]] = []
+    var allGameRefs: [[DocumentReference]] = []
     
     init(_ tournamentID: String) {
         self.tournamentID = tournamentID
@@ -53,7 +55,7 @@ class BracketViewModel {
                         Array(repeating: Game(), count: totalPlayers/8),
                         Array(repeating: Game(), count: totalPlayers/16),
                         Array(repeating: Game(), count: totalPlayers/32)]
-        let allGameRefs = [tournamentData.r1Games, tournamentData.r2Games, tournamentData.r3Games, tournamentData.r4Games, tournamentData.r5Games]
+        allGameRefs = [tournamentData.r1Games, tournamentData.r2Games, tournamentData.r3Games, tournamentData.r4Games, tournamentData.r5Games]
         let group = DispatchGroup()
         for (round, gameRefs) in allGameRefs.enumerated() {
             for (index, gameRef) in gameRefs.enumerated() {
@@ -68,7 +70,34 @@ class BracketViewModel {
             print("notify games triggered")
             completionHandler(gameList)
         }
-       
-        
+    }
+    
+    func updateGamePlayers() {
+        var winners = [Array(repeating: "", count: totalPlayers/2),
+                       Array(repeating: "", count: totalPlayers/4),
+                       Array(repeating: "", count: totalPlayers/8),
+                       Array(repeating: "", count: totalPlayers/16),
+                       Array(repeating: "", count: totalPlayers/32)]
+        for (round, games) in allGames.enumerated() {
+            for (index, game) in games.enumerated() {
+                winners[round][index] = game.winner
+            }
+        }
+        for (round, games) in allGames.enumerated() {
+            for (index, game) in games.enumerated() {
+                let gameRef = firebase.gamesRef?.document(allGameRefs[round][index].documentID)
+                if round == 0 {
+                    gameRef?.updateData([
+                        "player1": playerList[2*index].id,
+                        "player2": playerList[2*index+1].id
+                    ])
+                } else {
+                    gameRef?.updateData([
+                        "player1": winners[round-1][2*index],
+                        "player2": winners[round-1][2*index+1]
+                    ])
+                }
+            }
+        }
     }
 }

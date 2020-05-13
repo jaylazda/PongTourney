@@ -361,6 +361,11 @@
                                 <state key="normal" title="Leave Tournament">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="leaveTourneyClicked:" destination="Xxq-Kj-A0e" eventType="touchUpInside" id="6e1-we-c5G"/>
                                 </connections>
