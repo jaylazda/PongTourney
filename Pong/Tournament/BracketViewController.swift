@@ -34,6 +34,16 @@ class BracketViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let bracketVM = BracketViewModel(tourneyID)
+        bracketVM.initializeData {
+            bracketVM.fetchAllPlayers { players in
+                bracketVM.playerList = players
+            }
+            bracketVM.fetchAllGames { games in
+                bracketVM.allGames = games
+            }
+        }
+        
         visiblePlayers = Int(numPlayers)
         segments.removeAllSegments()
         addSegments()

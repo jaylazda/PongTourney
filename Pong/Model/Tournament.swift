@@ -13,7 +13,7 @@ struct Tournament: Codable {
     var currentRound: Int
     var r1Games: [DocumentReference]
     var r2Games: [DocumentReference]
-    var r3games: [DocumentReference]
+    var r3Games: [DocumentReference]
     var r4Games: [DocumentReference]
     var r5Games: [DocumentReference]
     var numPlayers: Int
@@ -28,7 +28,7 @@ struct Tournament: Codable {
         self.currentRound = 1
         self.r1Games = []
         self.r2Games = []
-        self.r3games = []
+        self.r3Games = []
         self.r4Games = []
         self.r5Games = []
         self.numPlayers = 0

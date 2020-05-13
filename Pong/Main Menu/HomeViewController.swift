@@ -28,7 +28,7 @@ class HomeViewController: UIViewController {
         startGameButton.layer.cornerRadius = 25
         logoutButton.layer.cornerRadius = 25
         getAllPlayers()
-        defaults.removeObject(forKey: user)
+        //defaults.removeObject(forKey: user)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -145,10 +145,3 @@ extension UIView {
         }
     }
 }
-
-/*
- create tournament with 16 players
- -> 8 Games are initialized
- -> each game has 2 players, each game is a section
- -> players are loaded into games
- */
