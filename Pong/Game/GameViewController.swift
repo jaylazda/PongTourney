@@ -316,6 +316,11 @@ class GameViewController: UIViewController {
                     self.allP1Cups[index]?.isHidden = false
                 }
             }
+            if game.shotHit[0] && game.shotHit[1] {
+                self.gameVM?.gameData?.shotHit = [false, false]
+                self.p1Shot.setTitle("\(self.player1Name)'s Shot", for: .normal)
+                self.p2Shot.setTitle("\(self.player2Name)'s Shot", for: .normal)
+            }
             if game.winner != "" {
                 if game.winner == self.players[0].id {
                     self.winnerName = self.player1Name

@@ -26,6 +26,7 @@ struct Game: Codable {
     var score: [Int]
     var winner: String
     var isFinished: Bool
+    var shotHit: [Bool]
     
     init() {
         self.id = ""
@@ -43,6 +44,7 @@ struct Game: Codable {
         self.score = [0, 0]
         self.winner = ""
         self.isFinished = false
+        self.shotHit = [false, false]
     }
     
     init(id: String) {
@@ -61,5 +63,6 @@ struct Game: Codable {
         self.score = [0, 0]
         self.winner = ""
         self.isFinished = false
+        self.shotHit = [false, false]
     }
 }

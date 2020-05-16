@@ -102,18 +102,31 @@ class GameViewModel {
     }
     
     //set cup to true, add 1 shot to game, if last shot, switch turns
-    func playerShotScored(cupHit: Int, player: Player) {
+    func playerShotScored(cupHit: Int, player: Player) { 
         if var gameData = gameData {
+            gameData.shotHit[gameData.shotsRemaining] = true
             if player.id == players[0].id {
-                gameData.p1OnRedemption = false
-                gameData.p1CupsHit += 1
-                if gameData.p1CupsHit >= 6 { //P2 redemption
-                    gameData.p2OnRedemption = true
+                if gameData.p1OnRedemption {
+                    players[0].redemptions += 1
                     gameData.p1Turn = false
                     gameData.shotsRemaining = 2
+                    gameData.p1OnRedemption = false
+                    gameData.shotHit = [false, false]
                 } else {
-                    gameData.score[0] += 1
-                    gameData.p1CupsLeft[cupHit] = true
+                    gameData.p1CupsHit += 1
+                    if gameData.p1CupsHit >= 6 {
+                        gameData.p2OnRedemption = true
+                        gameData.p1Turn = false
+                        gameData.shotsRemaining = 2
+                        gameData.shotHit = [false, false]
+                    } else {
+                        gameData.score[0] += 1
+                        gameData.p1CupsLeft[cupHit] = true
+                        if gameData.shotHit[0] && gameData.shotHit[1] {
+                            gameData.p1Turn = true
+                            gameData.shotsRemaining = 2
+                        }
+                    }
                 }
                 firebase.gamesRef?.document(gameID).updateData([
                     "p1CupsLeft": gameData.p1CupsLeft,
@@ -121,19 +134,32 @@ class GameViewModel {
                     "p1OnRedemption": gameData.p1OnRedemption,
                     "p2OnRedemption": gameData.p2OnRedemption,
                     "p1Turn": gameData.p1Turn,
+                    "shotHit": gameData.shotHit,
                     "shotsRemaining": gameData.shotsRemaining,
                     "score": gameData.score
                 ])
             } else if player.id == players[1].id {
-                gameData.p2OnRedemption = false
-                gameData.p2CupsHit += 1
-                if gameData.p2CupsHit >= 6 {
-                    gameData.p1OnRedemption = true
+                if gameData.p2OnRedemption {
+                    players[1].redemptions += 1
                     gameData.p1Turn = true
                     gameData.shotsRemaining = 2
+                    gameData.p2OnRedemption = false
+                    gameData.shotHit = [false, false]
                 } else {
-                    gameData.score[1] += 1
-                    gameData.p2CupsLeft[cupHit] = true
+                    gameData.p2CupsHit += 1
+                    if gameData.p2CupsHit >= 6 {
+                        gameData.p1OnRedemption = true
+                        gameData.p1Turn = true
+                        gameData.shotsRemaining = 2
+                         gameData.shotHit = [false, false]
+                    } else {
+                        gameData.score[1] += 1
+                        gameData.p2CupsLeft[cupHit] = true
+                        if gameData.shotHit[0] && gameData.shotHit[1] {
+                            gameData.p1Turn = false
+                            gameData.shotsRemaining = 2
+                        }
+                    }
                 }
                 firebase.gamesRef?.document(gameID).updateData([
                     "p2CupsLeft": gameData.p2CupsLeft,
@@ -141,6 +167,7 @@ class GameViewModel {
                     "p1OnRedemption": gameData.p1OnRedemption,
                     "p2OnRedemption": gameData.p2OnRedemption,
                     "p1Turn": gameData.p1Turn,
+                    "shotHit": gameData.shotHit,
                     "shotsRemaining": gameData.shotsRemaining,
                     "score": gameData.score
                 ])
@@ -168,14 +195,62 @@ class GameViewModel {
                     gameData.score[0] = 6
                 }
             }
+            if gameData.isFinished {
+                uploadPlayerStats()
+            }
             firebase.gamesRef?.document(gameID).updateData([
                 "shotsRemaining": gameData.shotsRemaining,
                 "p1Turn": gameData.p1Turn,
                 "winner": gameData.winner,
                 "p1CupsLeft": gameData.p1CupsLeft,
                 "p2CupsLeft": gameData.p2CupsLeft,
-                "score": gameData.score
+                "score": gameData.score,
+                "isFinished": gameData.isFinished,
+                "shotHit": gameData.shotHit
             ])
+        }
+    }
+    
+    func uploadPlayerStats() {
+        if let gameData = gameData {
+            players[0].shots += gameData.p1TotalShots
+            players[0].shotsHit += gameData.p1CupsHit
+            players[0].shotsMissed += gameData.p1TotalShots - gameData.p1CupsHit
+            players[0].games += 1
+            players[0].shotPercentage = "\(Double(players[0].shotsHit)/Double(players[0].shots))%"
+            players[1].shots += gameData.p2TotalShots
+            players[1].shotsHit += gameData.p2CupsHit
+            players[1].shotsMissed += gameData.p2TotalShots - gameData.p1CupsHit
+            players[1].games += 1
+            players[1].shotPercentage = "\(Double(players[1].shotsHit)/Double(players[1].shots))%"
+            if gameData.winner == players[0].id {
+                players[0].wins += 1
+                players[1].losses += 1
+            } else {
+                players[0].losses += 1
+                players[1].wins += 1
+            }
+        }
+        for i in 0 ..< 2 {
+            firebase.playersRef?.whereField("id", isEqualTo: players[i].id)
+                .getDocuments() { (querySnapshot, err) in
+                    if let err = err {
+                        print("Error getting documents: \(err)")
+                    } else {
+                        for document in querySnapshot!.documents {
+                            document.reference.updateData([
+                                "shots": self.players[i].shots,
+                                "shotsHit": self.players[i].shotsHit,
+                                "shotsMissed": self.players[i].shotsMissed,
+                                "shotPercentage": self.players[i].shotPercentage,
+                                "games": self.players[i].games,
+                                "wins": self.players[i].wins,
+                                "losses": self.players[i].losses,
+                                "redemptions": self.players[i].redemptions
+                            ])
+                        }
+                    }
+            }
         }
     }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		003194435A9BBBBA3F6C06A8 /* Pods_Pong.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0CFF42D570CC13A4CCAD921 /* Pods_Pong.framework */; };
 		82065B192464F8EF00835449 /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82065B182464F8EF00835449 /* GameViewModel.swift */; };
 		82065B1B24685F2A00835449 /* WinnerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82065B1A24685F2A00835449 /* WinnerViewController.swift */; };
 		8227C8AF245F3D51005D3301 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8227C8AE245F3D51005D3301 /* FirebaseService.swift */; };
@@ -35,11 +36,10 @@
 		8257A33E245B68EB004641C6 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8257A33D245B68EB004641C6 /* Game.swift */; };
 		8257A340245BC52D004641C6 /* JoinTournamentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8257A33F245BC52D004641C6 /* JoinTournamentViewController.swift */; };
 		8298119D246269C4004DD06A /* BracketViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8298119C246269C4004DD06A /* BracketViewModel.swift */; };
-		D23B9D431530B031CB2F928E /* Pods_Pong.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CC04353233E3C6487B3799D /* Pods_Pong.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5CC04353233E3C6487B3799D /* Pods_Pong.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pong.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		62C0058FDF3A2387BB363235 /* Pods-Pong.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pong.debug.xcconfig"; path = "Target Support Files/Pods-Pong/Pods-Pong.debug.xcconfig"; sourceTree = "<group>"; };
 		82065B182464F8EF00835449 /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
 		82065B1A24685F2A00835449 /* WinnerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WinnerViewController.swift; sourceTree = "<group>"; };
 		8227C8AE245F3D51005D3301 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
@@ -70,8 +70,8 @@
 		8257A33D245B68EB004641C6 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		8257A33F245BC52D004641C6 /* JoinTournamentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinTournamentViewController.swift; sourceTree = "<group>"; };
 		8298119C246269C4004DD06A /* BracketViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BracketViewModel.swift; sourceTree = "<group>"; };
-		A077D211B80206EB2C85F229 /* Pods-Pong.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pong.release.xcconfig"; path = "Target Support Files/Pods-Pong/Pods-Pong.release.xcconfig"; sourceTree = "<group>"; };
-		FA2975C4D7C568B2521C89F7 /* Pods-Pong.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pong.debug.xcconfig"; path = "Target Support Files/Pods-Pong/Pods-Pong.debug.xcconfig"; sourceTree = "<group>"; };
+		A0CFF42D570CC13A4CCAD921 /* Pods_Pong.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pong.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC92315B8F19759DA181CD8B /* Pods-Pong.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pong.release.xcconfig"; path = "Target Support Files/Pods-Pong/Pods-Pong.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,7 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D23B9D431530B031CB2F928E /* Pods_Pong.framework in Frameworks */,
+				003194435A9BBBBA3F6C06A8 /* Pods_Pong.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,10 +89,18 @@
 		2687B2459167550360FEF6E9 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				FA2975C4D7C568B2521C89F7 /* Pods-Pong.debug.xcconfig */,
-				A077D211B80206EB2C85F229 /* Pods-Pong.release.xcconfig */,
+				62C0058FDF3A2387BB363235 /* Pods-Pong.debug.xcconfig */,
+				BC92315B8F19759DA181CD8B /* Pods-Pong.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		577075BC61CE26BE74666768 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A0CFF42D570CC13A4CCAD921 /* Pods_Pong.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		8227C8A7245F0837005D3301 /* Model */ = {
@@ -139,7 +147,7 @@
 				8257A301245760B8004641C6 /* Pong */,
 				8257A300245760B8004641C6 /* Products */,
 				2687B2459167550360FEF6E9 /* Pods */,
-				9D029609471AB70313149325 /* Frameworks */,
+				577075BC61CE26BE74666768 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -205,14 +213,6 @@
 			path = Tournament;
 			sourceTree = "<group>";
 		};
-		9D029609471AB70313149325 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				5CC04353233E3C6487B3799D /* Pods_Pong.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -220,11 +220,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8257A313245760BD004641C6 /* Build configuration list for PBXNativeTarget "Pong" */;
 			buildPhases = (
-				B3A33C56951586950CC8257F /* [CP] Check Pods Manifest.lock */,
+				EFA18C5905F8AB6D244A7188 /* [CP] Check Pods Manifest.lock */,
 				8257A2FB245760B8004641C6 /* Sources */,
 				8257A2FC245760B8004641C6 /* Frameworks */,
 				8257A2FD245760B8004641C6 /* Resources */,
-				4CE056F7F16D2984A37688BC /* [CP] Embed Pods Frameworks */,
+				C3973E3451BAE74FE603967F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -287,7 +287,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4CE056F7F16D2984A37688BC /* [CP] Embed Pods Frameworks */ = {
+		C3973E3451BAE74FE603967F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -304,7 +304,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Pong/Pods-Pong-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B3A33C56951586950CC8257F /* [CP] Check Pods Manifest.lock */ = {
+		EFA18C5905F8AB6D244A7188 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -494,7 +494,7 @@
 		};
 		8257A314245760BD004641C6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FA2975C4D7C568B2521C89F7 /* Pods-Pong.debug.xcconfig */;
+			baseConfigurationReference = 62C0058FDF3A2387BB363235 /* Pods-Pong.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -515,7 +515,7 @@
 		};
 		8257A315245760BD004641C6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A077D211B80206EB2C85F229 /* Pods-Pong.release.xcconfig */;
+			baseConfigurationReference = BC92315B8F19759DA181CD8B /* Pods-Pong.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";

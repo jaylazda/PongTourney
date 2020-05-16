@@ -22,12 +22,22 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //view.setGradientBackground(colorOne: .darkGray, colorTwo: .lightGray)
+        var shadowLayer = CAShapeLayer()
+        shadowLayer.path = UIBezierPath(roundedRect: setUpTourneyButton.bounds, cornerRadius: 25).cgPath
+        shadowLayer.fillColor = UIColor.red.cgColor
+        shadowLayer.shadowColor = UIColor.black.cgColor
+        shadowLayer.shadowPath = shadowLayer.path
+        shadowLayer.shadowOffset = CGSize(width: 1.0, height: 1.0)
+        shadowLayer.shadowOpacity = 0.5
+        shadowLayer.shadowRadius = 2
+        setUpTourneyButton.layer.insertSublayer(shadowLayer, at: 0)
         setUpTourneyButton.layer.cornerRadius = 25
         leaderboardsButton.layer.cornerRadius = 25
         myStatsButton.layer.cornerRadius = 25
         startGameButton.layer.cornerRadius = 25
         logoutButton.layer.cornerRadius = 25
-        getAllPlayers()
+        //getAllPlayers()
         //defaults.removeObject(forKey: user)
     }
 
@@ -81,36 +91,23 @@ class HomeViewController: UIViewController {
             tourneyVC.numPlayers = defaults.double(forKey: "numPlayers")
             return
         }
-        leaderboardVC.allPlayers = self.allPlayers
-    }
-    
-    func getAllPlayers() {
-        FirebaseService.shared.playersRef?.getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                 let result = Result {
-                     try document.data(as: Player.self)
-                 }
-                 switch result {
-                 case .success(let player):
-                     if let player = player {
-                         self.allPlayers.append(player)
-                     } else {
-                         //nil
-                     }
-                 case .failure(let error):
-                     print("Error decoding player: \(error)")
-                 }
-                }
-            }
-        }
+//        leaderboardVC.allPlayers = self.allPlayers
     }
 
 }
 
 extension UIView {
+    
+    func setGradientBackground(colorOne: UIColor, colorTwo: UIColor) {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = bounds
+        gradientLayer.colors = [colorOne.cgColor, colorTwo.cgColor]
+        gradientLayer.locations = [0.0, 1.0]
+        gradientLayer.startPoint = CGPoint(x: 1.0, y: 1.0)
+        gradientLayer.endPoint = CGPoint(x: 0.0, y: 0.0)
+        layer.insertSublayer(gradientLayer, at: 0)
+    }
+    
     @IBInspectable var cornerRadius: CGFloat {
         get {
             return layer.cornerRadius

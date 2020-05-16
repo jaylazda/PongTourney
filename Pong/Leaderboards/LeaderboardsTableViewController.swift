@@ -15,10 +15,36 @@ class LeaderboardsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        getAllPlayers()
         let nib = UINib(nibName: "LeaderboardsTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "statsCell")
         
         
+    }
+    
+    func getAllPlayers() {
+        FirebaseService.shared.playersRef?.getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                 let result = Result {
+                     try document.data(as: Player.self)
+                 }
+                 switch result {
+                 case .success(let player):
+                     if let player = player {
+                         self.allPlayers.append(player)
+                     } else {
+                         print("Player is empty")
+                     }
+                 case .failure(let error):
+                     print("Error decoding player: \(error)")
+                 }
+                }
+            }
+            self.tableView.reloadData()
+        }
     }
 
     // MARK: - Table view data source
@@ -31,6 +57,10 @@ class LeaderboardsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         print(allPlayers.count)
         return allPlayers.count + 1
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
     }
 
     

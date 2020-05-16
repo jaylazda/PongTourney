@@ -98,7 +98,6 @@
                                 <size key="titleShadowOffset" width="1" height="1"/>
                                 <state key="normal" title="Tournament">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <color key="titleShadowColor" red="0.1450980392" green="0.14117647059999999" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
@@ -185,9 +184,6 @@
                                     <segue destination="WSx-Df-hwX" kind="show" id="fGr-nW-2KG"/>
                                 </connections>
                             </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pongIcon" translatesAutoresizingMaskIntoConstraints="NO" id="t0Z-O0-QVy">
-                                <rect key="frame" x="111" y="559" width="193" height="200"/>
-                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zby-mY-jUt">
                                 <rect key="frame" x="134" y="807" width="146" height="55"/>
                                 <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -213,27 +209,30 @@
                                     <action selector="startGameClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="aXM-44-Azh"/>
                                 </connections>
                             </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="beerpongcups" translatesAutoresizingMaskIntoConstraints="NO" id="t0Z-O0-QVy">
+                                <rect key="frame" x="79" y="530" width="257" height="248"/>
+                            </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="0.80000000000000004" green="0.77254901960784317" blue="0.72549019607843135" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Zby-mY-jUt" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="4rF-kQ-3ge"/>
                             <constraint firstItem="sFi-FX-hok" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="67" id="7ji-hl-DHr"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="t0Z-O0-QVy" secondAttribute="bottom" constant="103" id="EgT-Oe-frU"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="t0Z-O0-QVy" secondAttribute="bottom" constant="84" id="EgT-Oe-frU"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="C5g-Kl-q6q" secondAttribute="trailing" constant="67" id="FQd-z1-zSb"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="t0Z-O0-QVy" secondAttribute="trailing" constant="110" id="PvR-r3-u4X"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="t0Z-O0-QVy" secondAttribute="trailing" constant="78" id="PvR-r3-u4X"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Zby-mY-jUt" secondAttribute="trailing" constant="134" id="TKV-kf-XG1"/>
-                            <constraint firstItem="t0Z-O0-QVy" firstAttribute="top" secondItem="sFi-FX-hok" secondAttribute="bottom" constant="56" id="Vc4-o6-CJ7"/>
+                            <constraint firstItem="t0Z-O0-QVy" firstAttribute="top" secondItem="sFi-FX-hok" secondAttribute="bottom" constant="27" id="Vc4-o6-CJ7"/>
                             <constraint firstItem="C5g-Kl-q6q" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="67" id="VeI-u6-g4Z"/>
                             <constraint firstItem="faU-qx-dfc" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="93" id="Xpp-qO-d84"/>
                             <constraint firstItem="sFi-FX-hok" firstAttribute="top" secondItem="gbk-ap-V0s" secondAttribute="bottom" constant="34" id="XvD-D3-rXW"/>
-                            <constraint firstItem="t0Z-O0-QVy" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="111" id="ZLk-RB-pVo"/>
+                            <constraint firstItem="t0Z-O0-QVy" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="79" id="ZLk-RB-pVo"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="gbk-ap-V0s" secondAttribute="trailing" constant="67" id="ajE-wy-wpo"/>
                             <constraint firstItem="gbk-ap-V0s" firstAttribute="top" secondItem="C5g-Kl-q6q" secondAttribute="bottom" constant="34" id="ba0-e8-jIn"/>
                             <constraint firstItem="C5g-Kl-q6q" firstAttribute="top" secondItem="faU-qx-dfc" secondAttribute="bottom" constant="34" id="d8P-Hs-2yn"/>
                             <constraint firstItem="faU-qx-dfc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="67" id="dGD-0R-kxL"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="faU-qx-dfc" secondAttribute="trailing" constant="67" id="hrW-9l-O4O"/>
                             <constraint firstItem="gbk-ap-V0s" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="67" id="iBb-4x-8uS"/>
-                            <constraint firstItem="t0Z-O0-QVy" firstAttribute="top" secondItem="sFi-FX-hok" secondAttribute="bottom" constant="56" id="oY0-oV-qna"/>
+                            <constraint firstItem="t0Z-O0-QVy" firstAttribute="top" secondItem="sFi-FX-hok" secondAttribute="bottom" constant="27" id="oY0-oV-qna"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="sFi-FX-hok" secondAttribute="trailing" constant="67" id="xlZ-tg-lJO"/>
                             <constraint firstItem="Zby-mY-jUt" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="134" id="yhY-Tv-IHr"/>
                         </constraints>
@@ -253,7 +252,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1051" y="160"/>
+            <point key="canvasLocation" x="1050.7246376811595" y="159.375"/>
         </scene>
         <!--Bracket Setup View Controller-->
         <scene sceneID="80I-X2-AkM">
@@ -408,16 +407,16 @@
         <scene sceneID="oy5-xQ-ghP">
             <objects>
                 <tableViewController id="WSx-Df-hwX" customClass="LeaderboardsTableViewController" customModule="Pong" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="7hq-R8-4sy">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="7hq-R8-4sy">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.068600915370000001" green="0.16740104559999999" blue="0.3794826865" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.0" green="0.24994132963559773" blue="0.51818152883936308" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="statsCell" id="8uO-RV-8Ub">
-                                <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                <rect key="frame" x="0.0" y="28" width="414" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="8uO-RV-8Ub" id="NbX-Qn-NfX">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Rank" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FdP-kJ-Xcr">
@@ -477,7 +476,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zcC-XI-iE4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2835" y="728"/>
+            <point key="canvasLocation" x="2635" y="1128"/>
         </scene>
         <!--Join Tournament View Controller-->
         <scene sceneID="aTb-PF-BqO">
@@ -1055,7 +1054,7 @@
                                         </state>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="25"/>
+                                                <real key="value" value="15"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
@@ -1327,6 +1326,21 @@
             </objects>
             <point key="canvasLocation" x="-280" y="617"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="mJo-bi-jyG">
+            <objects>
+                <viewController id="Ilb-On-qdw" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="YOp-2N-AKB">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="gPo-Qk-XMO"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bcc-Fv-Un9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3245" y="422"/>
+        </scene>
         <!--Login View Controller-->
         <scene sceneID="Kbh-XE-9DC">
             <objects>
@@ -1407,10 +1421,10 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="OYH-2t-POd"/>
+        <segue reference="10y-O4-e89"/>
         <segue reference="n4H-Us-ItC"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="pongIcon" width="500" height="500"/>
+        <image name="beerpongcups" width="800" height="600"/>
     </resources>
 </document>

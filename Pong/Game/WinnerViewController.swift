@@ -26,6 +26,7 @@ class WinnerViewController: UIViewController {
         bgView.insertSubview(blurEffectView, belowSubview: popUpView)
     }
     
+    // TODO: this
     @IBAction func dismissClicked(_ sender: Any) {
         
     }

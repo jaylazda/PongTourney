@@ -167,12 +167,23 @@ extension BracketViewController: UITableViewDataSource, UITableViewDelegate {
                     if let player = bracketVM?.playerList.first(where: {$0.id == game.player1}) {
                         cell.name.text = player.firstName
                     }
+                    if game.winner == game.player2 {
+                        cell.contentView.alpha = 0.85
+                    } else {
+                        cell.contentView.alpha = 1.0
+                    }
                 } else {
                     if let player = bracketVM?.playerList.first(where: {$0.id == game.player2}) {
                         cell.name.text = player.firstName
                     }
+                    if game.winner == game.player1 {
+                        cell.contentView.alpha = 0.85
+                    } else {
+                        cell.contentView.alpha = 1.0
+                    }
                 }
                 cell.cupsHit.text = String(describing: game.score[indexPath.row])
+                
             }
         }
         return cell
@@ -192,7 +203,18 @@ extension BracketViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         view.tintColor = tableView.backgroundColor
+//        var shadowLayer = CAShapeLayer()
+//        shadowLayer.path = UIBezierPath(roundedRect: view.bounds, cornerRadius: 0).cgPath
+////        shadowLayer.fillColor = UIColor.red.cgColor
+//        shadowLayer.shadowColor = UIColor.black.cgColor
+//        shadowLayer.shadowPath = shadowLayer.path
+//        shadowLayer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+//        shadowLayer.shadowOpacity = 0.5
+//        shadowLayer.shadowRadius = 1
+//        view.layer.insertSublayer(shadowLayer, at: 0)
     }
+
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if !(bracketVM?.tournamentData.tourneyFull ?? false) { return }
         if !(bracketVM?.allGames.isEmpty ?? true) && !(bracketVM?.allGames[seg].isEmpty ?? true) {
