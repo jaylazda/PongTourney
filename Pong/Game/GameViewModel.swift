@@ -104,7 +104,9 @@ class GameViewModel {
     //set cup to true, add 1 shot to game, if last shot, switch turns
     func playerShotScored(cupHit: Int, player: Player) { 
         if var gameData = gameData {
-            gameData.shotHit[gameData.shotsRemaining] = true
+            if gameData.shotsRemaining == 0 || gameData.shotsRemaining == 1 {
+                gameData.shotHit[gameData.shotsRemaining] = true
+            }
             if player.id == players[0].id {
                 if gameData.p1OnRedemption {
                     players[0].redemptions += 1
@@ -195,9 +197,7 @@ class GameViewModel {
                     gameData.score[0] = 6
                 }
             }
-            if gameData.isFinished {
-                uploadPlayerStats()
-            }
+            
             firebase.gamesRef?.document(gameID).updateData([
                 "shotsRemaining": gameData.shotsRemaining,
                 "p1Turn": gameData.p1Turn,
@@ -208,10 +208,13 @@ class GameViewModel {
                 "isFinished": gameData.isFinished,
                 "shotHit": gameData.shotHit
             ])
+            if gameData.isFinished {
+                uploadPlayerStats(winner: gameData.winner)
+            }
         }
     }
     
-    func uploadPlayerStats() {
+    func uploadPlayerStats(winner: String) {
         if let gameData = gameData {
             players[0].shots += gameData.p1TotalShots
             players[0].shotsHit += gameData.p1CupsHit
@@ -223,7 +226,7 @@ class GameViewModel {
             players[1].shotsMissed += gameData.p2TotalShots - gameData.p1CupsHit
             players[1].games += 1
             players[1].shotPercentage = "\(Double(players[1].shotsHit)/Double(players[1].shots))%"
-            if gameData.winner == players[0].id {
+            if winner == players[0].id {
                 players[0].wins += 1
                 players[1].losses += 1
             } else {

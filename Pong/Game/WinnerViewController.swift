@@ -28,7 +28,7 @@ class WinnerViewController: UIViewController {
     
     // TODO: this
     @IBAction func dismissClicked(_ sender: Any) {
-        
+        self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
     /*

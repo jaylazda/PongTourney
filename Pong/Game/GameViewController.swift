@@ -53,6 +53,7 @@ class GameViewController: UIViewController {
     }
     
     func initialLayout() {
+        print(player1Name)
         p1Name?.text = player1Name
         p2Name?.text = player2Name
         p1Shot.setTitle("\(player1Name)'s Shot", for: .normal)
@@ -72,6 +73,8 @@ class GameViewController: UIViewController {
     
     func setAllButtons() {
         if gameVM?.gameData?.p1Turn ?? true {
+            p1Shot.alpha = 1
+            p2Shot.alpha = 0.75
             p1Shot.isEnabled = true
             for cup in allP2Cups {
                 cup?.isEnabled = true
@@ -81,6 +84,8 @@ class GameViewController: UIViewController {
                 cup?.isEnabled = false
             }
         } else {
+            p2Shot.alpha = 1
+            p1Shot.alpha = 0.75
             p2Shot.isEnabled = true
             for cup in allP1Cups {
                 cup?.isEnabled = true

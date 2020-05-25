@@ -205,7 +205,7 @@ extension BracketViewController: UITableViewDataSource, UITableViewDelegate {
         view.tintColor = tableView.backgroundColor
 //        var shadowLayer = CAShapeLayer()
 //        shadowLayer.path = UIBezierPath(roundedRect: view.bounds, cornerRadius: 0).cgPath
-////        shadowLayer.fillColor = UIColor.red.cgColor
+//        shadowLayer.fillColor = UIColor.red.cgColor
 //        shadowLayer.shadowColor = UIColor.black.cgColor
 //        shadowLayer.shadowPath = shadowLayer.path
 //        shadowLayer.shadowOffset = CGSize(width: 0.0, height: 0.0)
