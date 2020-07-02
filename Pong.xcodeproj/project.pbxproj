@@ -35,12 +35,24 @@
 		8257A33C245B6815004641C6 /* Tournament.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8257A33B245B6815004641C6 /* Tournament.swift */; };
 		8257A33E245B68EB004641C6 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8257A33D245B68EB004641C6 /* Game.swift */; };
 		8257A340245BC52D004641C6 /* JoinTournamentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8257A33F245BC52D004641C6 /* JoinTournamentViewController.swift */; };
+		82615FA4247CB303001F3458 /* WaitingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82615FA3247CB303001F3458 /* WaitingRoomViewController.swift */; };
 		8298119D246269C4004DD06A /* BracketViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8298119C246269C4004DD06A /* BracketViewModel.swift */; };
+		82BEFB3524A9FEDC0073AADD /* PongUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82BEFB3424A9FEDC0073AADD /* PongUITests.swift */; };
 		82DA03B22471FD0400CEFEC2 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82DA03B12471FD0400CEFEC2 /* ProfileViewController.swift */; };
 		82DA03B52471FF5A00CEFEC2 /* GameSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82DA03B42471FF5A00CEFEC2 /* GameSetupViewController.swift */; };
 		82DA03B72472EEAB00CEFEC2 /* RecentGameCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82DA03B62472EEAB00CEFEC2 /* RecentGameCollectionViewCell.swift */; };
 		82DA03B92472EEC100CEFEC2 /* MyStatsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82DA03B82472EEC100CEFEC2 /* MyStatsTableViewCell.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		82BEFB3724A9FEDC0073AADD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8257A2F7245760B8004641C6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8257A2FE245760B8004641C6;
+			remoteInfo = Pong;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		62C0058FDF3A2387BB363235 /* Pods-Pong.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pong.debug.xcconfig"; path = "Target Support Files/Pods-Pong/Pods-Pong.debug.xcconfig"; sourceTree = "<group>"; };
@@ -73,7 +85,11 @@
 		8257A33B245B6815004641C6 /* Tournament.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tournament.swift; sourceTree = "<group>"; };
 		8257A33D245B68EB004641C6 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		8257A33F245BC52D004641C6 /* JoinTournamentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinTournamentViewController.swift; sourceTree = "<group>"; };
+		82615FA3247CB303001F3458 /* WaitingRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingRoomViewController.swift; sourceTree = "<group>"; };
 		8298119C246269C4004DD06A /* BracketViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BracketViewModel.swift; sourceTree = "<group>"; };
+		82BEFB3224A9FEDC0073AADD /* PongUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PongUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		82BEFB3424A9FEDC0073AADD /* PongUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PongUITests.swift; sourceTree = "<group>"; };
+		82BEFB3624A9FEDC0073AADD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		82DA03B12471FD0400CEFEC2 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		82DA03B42471FF5A00CEFEC2 /* GameSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSetupViewController.swift; sourceTree = "<group>"; };
 		82DA03B62472EEAB00CEFEC2 /* RecentGameCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentGameCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -88,6 +104,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				003194435A9BBBBA3F6C06A8 /* Pods_Pong.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		82BEFB2F24A9FEDC0073AADD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,6 +176,7 @@
 				8257A338245A5AE9004641C6 /* Font Awesome 5 Free-Regular-400.otf */,
 				8257A337245A5AE9004641C6 /* Font Awesome 5 Free-Solid-900.otf */,
 				8257A301245760B8004641C6 /* Pong */,
+				82BEFB3324A9FEDC0073AADD /* PongUITests */,
 				8257A300245760B8004641C6 /* Products */,
 				2687B2459167550360FEF6E9 /* Pods */,
 				577075BC61CE26BE74666768 /* Frameworks */,
@@ -163,6 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				8257A2FF245760B8004641C6 /* Pong.app */,
+				82BEFB3224A9FEDC0073AADD /* PongUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -225,6 +250,15 @@
 			path = Tournament;
 			sourceTree = "<group>";
 		};
+		82BEFB3324A9FEDC0073AADD /* PongUITests */ = {
+			isa = PBXGroup;
+			children = (
+				82BEFB3424A9FEDC0073AADD /* PongUITests.swift */,
+				82BEFB3624A9FEDC0073AADD /* Info.plist */,
+			);
+			path = PongUITests;
+			sourceTree = "<group>";
+		};
 		82DA03B02471FC9800CEFEC2 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -236,6 +270,7 @@
 		82DA03B32471FF3600CEFEC2 /* Single Game */ = {
 			isa = PBXGroup;
 			children = (
+				82615FA3247CB303001F3458 /* WaitingRoomViewController.swift */,
 				82DA03B42471FF5A00CEFEC2 /* GameSetupViewController.swift */,
 			);
 			path = "Single Game";
@@ -263,18 +298,40 @@
 			productReference = 8257A2FF245760B8004641C6 /* Pong.app */;
 			productType = "com.apple.product-type.application";
 		};
+		82BEFB3124A9FEDC0073AADD /* PongUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 82BEFB3B24A9FEDD0073AADD /* Build configuration list for PBXNativeTarget "PongUITests" */;
+			buildPhases = (
+				82BEFB2E24A9FEDC0073AADD /* Sources */,
+				82BEFB2F24A9FEDC0073AADD /* Frameworks */,
+				82BEFB3024A9FEDC0073AADD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				82BEFB3824A9FEDC0073AADD /* PBXTargetDependency */,
+			);
+			name = PongUITests;
+			productName = PongUITests;
+			productReference = 82BEFB3224A9FEDC0073AADD /* PongUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		8257A2F7245760B8004641C6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1130;
+				LastSwiftUpdateCheck = 1140;
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Jacob Lazda";
 				TargetAttributes = {
 					8257A2FE245760B8004641C6 = {
 						CreatedOnToolsVersion = 11.3;
+					};
+					82BEFB3124A9FEDC0073AADD = {
+						CreatedOnToolsVersion = 11.4.1;
+						TestTargetID = 8257A2FE245760B8004641C6;
 					};
 				};
 			};
@@ -292,6 +349,7 @@
 			projectRoot = "";
 			targets = (
 				8257A2FE245760B8004641C6 /* Pong */,
+				82BEFB3124A9FEDC0073AADD /* PongUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -309,6 +367,13 @@
 				8257A30C245760BD004641C6 /* Assets.xcassets in Resources */,
 				8257A30A245760B8004641C6 /* Main.storyboard in Resources */,
 				8257A339245A5AE9004641C6 /* Font Awesome 5 Free-Solid-900.otf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		82BEFB3024A9FEDC0073AADD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,6 +444,7 @@
 				8257A321245779A3004641C6 /* Player.swift in Sources */,
 				82065B192464F8EF00835449 /* GameViewModel.swift in Sources */,
 				82DA03B52471FF5A00CEFEC2 /* GameSetupViewController.swift in Sources */,
+				82615FA4247CB303001F3458 /* WaitingRoomViewController.swift in Sources */,
 				8257A340245BC52D004641C6 /* JoinTournamentViewController.swift in Sources */,
 				8257A32D24592C70004641C6 /* BracketSetupViewController.swift in Sources */,
 				82DA03B22471FD0400CEFEC2 /* ProfileViewController.swift in Sources */,
@@ -388,7 +454,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		82BEFB2E24A9FEDC0073AADD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				82BEFB3524A9FEDC0073AADD /* PongUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		82BEFB3824A9FEDC0073AADD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8257A2FE245760B8004641C6 /* Pong */;
+			targetProxy = 82BEFB3724A9FEDC0073AADD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		8257A308245760B8004641C6 /* Main.storyboard */ = {
@@ -528,7 +610,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 62C0058FDF3A2387BB363235 /* Pods-Pong.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = F567V66DT2;
@@ -541,7 +623,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -549,7 +631,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BC92315B8F19759DA181CD8B /* Pods-Pong.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = F567V66DT2;
@@ -562,7 +644,47 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		82BEFB3924A9FEDC0073AADD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = F567V66DT2;
+				INFOPLIST_FILE = PongUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jacoblazda.PongUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Pong;
+			};
+			name = Debug;
+		};
+		82BEFB3A24A9FEDC0073AADD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = F567V66DT2;
+				INFOPLIST_FILE = PongUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jacoblazda.PongUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Pong;
 			};
 			name = Release;
 		};
@@ -583,6 +705,15 @@
 			buildConfigurations = (
 				8257A314245760BD004641C6 /* Debug */,
 				8257A315245760BD004641C6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		82BEFB3B24A9FEDD0073AADD /* Build configuration list for PBXNativeTarget "PongUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				82BEFB3924A9FEDC0073AADD /* Debug */,
+				82BEFB3A24A9FEDC0073AADD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

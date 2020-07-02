@@ -23,15 +23,6 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //view.setGradientBackground(colorOne: .darkGray, colorTwo: .lightGray)
-        var shadowLayer = CAShapeLayer()
-        shadowLayer.path = UIBezierPath(roundedRect: setUpTourneyButton.bounds, cornerRadius: 25).cgPath
-        shadowLayer.fillColor = UIColor.red.cgColor
-        shadowLayer.shadowColor = UIColor.black.cgColor
-        shadowLayer.shadowPath = shadowLayer.path
-        shadowLayer.shadowOffset = CGSize(width: 1.0, height: 1.0)
-        shadowLayer.shadowOpacity = 0.5
-        shadowLayer.shadowRadius = 2
-        setUpTourneyButton.layer.insertSublayer(shadowLayer, at: 0)
         setUpTourneyButton.layer.cornerRadius = 25
         leaderboardsButton.layer.cornerRadius = 25
         myStatsButton.layer.cornerRadius = 25

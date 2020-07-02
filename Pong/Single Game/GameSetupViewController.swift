@@ -16,8 +16,7 @@ class GameSetupViewController: UIViewController {
     let firebase = FirebaseService.shared
     var gameID = ""
     var game = Game()
-    var playerData = Player()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -25,42 +24,22 @@ class GameSetupViewController: UIViewController {
     }
     
     @IBAction func createGameClicked(_ sender: Any) {
-        firebase.playersRef?.whereField("id", isEqualTo: firebase.authentication?.currentUser?.uid ?? "")
-            .getDocuments() { querySnapshot, error in
-                    if let err = error {
-                        print("Error getting documents: \(err)")
-                    } else {
-                        for document in querySnapshot!.documents {
-                            let result = Result {
-                                try document.data(as: Player.self)
-                            }
-                            switch result {
-                            case .success(let player):
-                                if let player = player {
-                                    self.playerData = player
-                                    print("Received player data from server.")
-                                } else {
-                                    print("Player is empty")
-                                }
-                            case .failure(let error):
-                                print("Error decoding player: \(error)")
-                            }
-                        }
-                        self.game.player1 = self.playerData.firstName
-                        let result = Result {
-                            self.firebase.docRef = try self.firebase.gamesRef?.addDocument(from: self.game)
-                        }
-                        switch result {
-                        case .success:
-                            print("Game successfully added")
-                            self.gameID = self.firebase.docRef?.documentID as! String
-                        case .failure(let error):
-                            print("Error encoding game: \(error)")
-                        }
-                        self.performSegue(withIdentifier: "goToSingleGame", sender: self)
-                }
-            }
         
+        let result = Result {
+            self.firebase.docRef = try self.firebase.gamesRef?.addDocument(from: self.game)
+        }
+        switch result {
+        case .success:
+            print("Game successfully added")
+            self.gameID = self.firebase.docRef?.documentID as! String
+        case .failure(let error):
+            print("Error encoding game: \(error)")
+        }
+        self.game.player1 = self.firebase.authentication?.currentUser?.uid as! String
+        self.firebase.gamesRef?.document(self.gameID).updateData([
+            "player1": self.game.player1
+        ])
+        self.performSegue(withIdentifier: "goToWaitingRoom", sender: self)
     }
     
     @IBAction func joinGameClicked(_ sender: Any) {
@@ -85,7 +64,7 @@ class GameSetupViewController: UIViewController {
                     self.firebase.gamesRef?.document(self.gameID).updateData([
                         "player2": self.game.player2
                     ])
-                    self.performSegue(withIdentifier: "goToSingleGame", sender: self)
+                    self.performSegue(withIdentifier: "goToWaitingRoom", sender: self)
             
                 } else {
                     let alertController = UIAlertController(title: "Error", message: "Game does not exist.", preferredStyle: .alert)
@@ -97,10 +76,12 @@ class GameSetupViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let gameVC = segue.destination as? GameViewController else { return }
-        gameVC.gameID = gameID
-        gameVC.player1Name = game.player1
-        gameVC.player2Name = game.player2
+        guard let waitingRoomVC = segue.destination as? WaitingRoomViewController else { return }
+        waitingRoomVC.gameID = gameID
+//        guard let gameVC = segue.destination as? GameViewController else { return }
+//        gameVC.gameID = gameID
+//        gameVC.player1Name = game.player1
+//        gameVC.player2Name = game.player2
     }
     
 

@@ -55,8 +55,7 @@ class LeaderboardsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(allPlayers.count)
-        return allPlayers.count + 1
+        return allPlayers.count
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -66,15 +65,24 @@ class LeaderboardsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "statsCell", for: indexPath) as! LeaderboardsTableViewCell
-        if (indexPath.row > 0) {
-            cell.rank.text = "\(allPlayers[indexPath.row - 1].rank)"
-            cell.name.text = allPlayers[indexPath.row - 1].firstName
-            cell.games.text = "\(allPlayers[indexPath.row - 1].games)"
-            cell.wins.text = "\(allPlayers[indexPath.row - 1].wins)"
-            cell.losses.text = "\(allPlayers[indexPath.row - 1].losses)"
-            cell.shotPercent.text = "\(allPlayers[indexPath.row - 1].shotPercentage)"
+        if (allPlayers.indices.contains(indexPath.row)) {
+            cell.name.text = "\(allPlayers[indexPath.row].firstName) \(allPlayers[indexPath.row].lastName)"
+            cell.wins.text = "\(allPlayers[indexPath.row].wins) W"
+            cell.losses.text = "\(allPlayers[indexPath.row].losses) L"
+            cell.shotPercent.text = "\(formatPercentage(allPlayers[indexPath.row].shotPercentage)) Shots Hit"
+            cell.redemptions.text = "\(allPlayers[indexPath.row].redemptions) Redemptions"
         }
         return cell
+    }
+    
+    func formatPercentage(_ shotPercentage: String) -> String {
+        if shotPercentage == "0" { return "\(shotPercentage)%" }
+        var formatted = shotPercentage.prefix(4)
+        if formatted.count == 3 {
+            formatted += "0"
+        }
+        formatted = formatted.suffix(2)
+        return "\(String(formatted))%"
     }
 
 }

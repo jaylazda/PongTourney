@@ -118,7 +118,7 @@ class BracketViewController: UIViewController {
         defaults.removeObject(forKey: "numPlayers")
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let home = storyboard.instantiateViewController(identifier: "HomeViewController")
-        UIApplication.shared.keyWindow?.rootViewController = home
+        self.navigationController?.setViewControllers([home], animated: true)
     }
     
     

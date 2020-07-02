@@ -31,6 +31,8 @@ class GameViewController: UIViewController {
     @IBOutlet weak var p2Shot: UIButton!
     @IBOutlet weak var p1Balls: UILabel!
     @IBOutlet weak var p2Balls: UILabel!
+    @IBOutlet weak var stackView: UIStackView!
+    
     var gameID = ""
     var player1Name = ""
     var player2Name = ""
@@ -43,6 +45,15 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let screenHeight = UIScreen.main.bounds.height
+        print(screenHeight)
+        if screenHeight > 850 {
+            stackView.spacing = 45
+        } else if screenHeight > 800 {
+            stackView.spacing = 25
+        } else if screenHeight > 700 {
+            stackView.spacing = 10
+        }
         gameVM = GameViewModel(gameID, players)
         initialLayout()
     }
@@ -53,7 +64,6 @@ class GameViewController: UIViewController {
     }
     
     func initialLayout() {
-        print(player1Name)
         p1Name?.text = player1Name
         p2Name?.text = player2Name
         p1Shot.setTitle("\(player1Name)'s Shot", for: .normal)
@@ -101,6 +111,7 @@ class GameViewController: UIViewController {
     
     @IBAction func p1ShotClicked(_ sender: Any) {
         if p1Shot.titleLabel?.text == "\(player1Name)'s Shot" {
+            print(gameVM?.gameData?.shotsRemaining)
             if gameVM?.gameData?.shotsRemaining == 1 {
                 p1Shot.setTitle("End Turn", for: .normal)
             } else {
@@ -321,10 +332,15 @@ class GameViewController: UIViewController {
                     self.allP1Cups[index]?.isHidden = false
                 }
             }
+            if self.p2Shot.titleLabel?.text == "End Turn" {
+                self.p2Shot.setTitle("\(self.player2Name)'s Shot", for: .normal)
+            }
+            if self.p1Shot.titleLabel?.text == "End Turn" {
+                self.p1Shot.setTitle("\(self.player1Name)'s Shot", for: .normal)
+            }
             if game.shotHit[0] && game.shotHit[1] {
                 self.gameVM?.gameData?.shotHit = [false, false]
-                self.p1Shot.setTitle("\(self.player1Name)'s Shot", for: .normal)
-                self.p2Shot.setTitle("\(self.player2Name)'s Shot", for: .normal)
+                
             }
             if game.winner != "" {
                 if game.winner == self.players[0].id {

@@ -220,12 +220,12 @@ class GameViewModel {
             players[0].shotsHit += gameData.p1CupsHit
             players[0].shotsMissed += gameData.p1TotalShots - gameData.p1CupsHit
             players[0].games += 1
-            players[0].shotPercentage = "\(Double(players[0].shotsHit)/Double(players[0].shots))%"
+            players[0].shotPercentage = "\(Double(players[0].shotsHit)/Double(players[0].shots))"
             players[1].shots += gameData.p2TotalShots
             players[1].shotsHit += gameData.p2CupsHit
             players[1].shotsMissed += gameData.p2TotalShots - gameData.p1CupsHit
             players[1].games += 1
-            players[1].shotPercentage = "\(Double(players[1].shotsHit)/Double(players[1].shots))%"
+            players[1].shotPercentage = "\(Double(players[1].shotsHit)/Double(players[1].shots))"
             if winner == players[0].id {
                 players[0].wins += 1
                 players[1].losses += 1
