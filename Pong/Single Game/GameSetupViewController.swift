@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GameSetupViewController: UIViewController {
+class GameSetupViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var createGameButton: UIButton!
     @IBOutlet weak var gameIDTextField: UITextField!
@@ -19,7 +19,7 @@ class GameSetupViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        gameIDTextField.delegate = self
         // Do any additional setup after loading the view.
     }
     
@@ -84,5 +84,9 @@ class GameSetupViewController: UIViewController {
 //        gameVC.player2Name = game.player2
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 
 }

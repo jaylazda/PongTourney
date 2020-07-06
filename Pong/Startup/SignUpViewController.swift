@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SignUpViewController: UIViewController {
+class SignUpViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var firstNameField: UITextField!
@@ -20,6 +20,7 @@ class SignUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         signupButton.layer.cornerRadius = 25
+        passwordConfirm.delegate = self
     }
     
     @IBAction func signupButtonClicked(_ sender: Any) {
@@ -40,6 +41,11 @@ class SignUpViewController: UIViewController {
             self.present(alertController, animated: true, completion: nil)
         }
 
+    }
+ 
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 
 }
