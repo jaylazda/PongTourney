@@ -32,6 +32,7 @@ class GameViewController: UIViewController {
     @IBOutlet weak var p1Balls: UILabel!
     @IBOutlet weak var p2Balls: UILabel!
     @IBOutlet weak var stackView: UIStackView!
+    @IBOutlet weak var switchStarter: UIButton!
     
     var gameID = ""
     var player1Name = ""
@@ -107,12 +108,20 @@ class GameViewController: UIViewController {
         }
     }
     
+    @IBAction func switchStarterClicked(_ sender: Any) {
+        gameVM?.firebase.gamesRef?.document(self.gameID).updateData([
+            "p1Turn": !(gameVM?.gameData?.p1Turn)!
+        ])
+    }
+    
     // MARK: Shot Button Actions
     
     @IBAction func p1ShotClicked(_ sender: Any) {
+        switchStarter.isEnabled = false
+        switchStarter.isHidden = true
         if p1Shot.titleLabel?.text == "\(player1Name)'s Shot" {
             print(gameVM?.gameData?.shotsRemaining)
-            if gameVM?.gameData?.shotsRemaining == 1 {
+            if gameVM?.gameData?.shotsRemaining == 1 && !(gameVM?.gameData?.ballsBack)! {
                 p1Shot.setTitle("End Turn", for: .normal)
             } else {
                 p1Shot.setTitle("Miss", for: .normal)
@@ -152,8 +161,10 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func p2ShotClicked(_ sender: Any) {
+        switchStarter.isEnabled = false
+        switchStarter.isHidden = true
         if p2Shot.titleLabel?.text == "\(player2Name)'s Shot" {
-            if gameVM?.gameData?.shotsRemaining == 1 {
+            if gameVM?.gameData?.shotsRemaining == 1 && !(gameVM?.gameData?.ballsBack)! {
                 p2Shot.setTitle("End Turn", for: .normal)
             } else {
                 p2Shot.setTitle("Miss", for: .normal)
@@ -318,6 +329,11 @@ class GameViewController: UIViewController {
         gameVM?.fetchGameData(gameID) { game in
             self.layoutPongBalls()
             self.setAllButtons()
+            let shots = game.p1TotalShots + game.p2TotalShots
+            if shots > 0 {
+                self.switchStarter.isHidden = true
+                self.switchStarter.isEnabled = false
+            }
             for (index, cupHit) in game.p1CupsLeft.enumerated() {
                 if cupHit {
                     self.allP2Cups[index]?.isHidden = true
@@ -340,7 +356,10 @@ class GameViewController: UIViewController {
             }
             if game.shotHit[0] && game.shotHit[1] {
                 self.gameVM?.gameData?.shotHit = [false, false]
-                
+                self.gameVM?.firebase.gamesRef?.document(self.gameID).updateData([
+                    "shotHit": [false, false]
+                ])
+
             }
             if game.winner != "" {
                 if game.winner == self.players[0].id {

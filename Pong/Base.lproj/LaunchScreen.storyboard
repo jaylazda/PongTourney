@@ -24,7 +24,7 @@ TOURNEY</string>
                                 <color key="highlightedColor" red="0.99630981679999997" green="0.29910945890000001" blue="0.29407590630000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="0.99219352009999995" green="0.91080156580000005" blue="0.62289849149999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" red="0.068600915370000001" green="0.16740104559999999" blue="0.3794826865" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="OHO-ze-3Fw" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="150" id="5sh-KL-3ES"/>
                             <constraint firstItem="OHO-ze-3Fw" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="BZy-KS-UZy"/>

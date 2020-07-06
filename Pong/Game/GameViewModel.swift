@@ -88,6 +88,12 @@ class GameViewModel {
     func playerDidShoot(player: Player) {
         if var gameData = gameData {
             gameData.shotsRemaining -= 1
+            if gameData.ballsBack {
+                gameData.ballsBack = false
+                gameData.shotsRemaining = 2
+                gameData.p1Turn = (player.id == players[0].id)
+                gameData.shotHit = [false, false]
+            }
             if player.id == players[0].id {
                 gameData.p1TotalShots += 1
             } else if player.id == players[1].id {
@@ -96,7 +102,10 @@ class GameViewModel {
             firebase.gamesRef?.document(gameID).updateData([
                 "shotsRemaining": gameData.shotsRemaining,
                 "p1TotalShots": gameData.p1TotalShots,
-                "p2TotalShots": gameData.p2TotalShots
+                "p2TotalShots": gameData.p2TotalShots,
+                "ballsBack": gameData.ballsBack,
+                "p1Turn": gameData.p1Turn,
+                "shotHit": gameData.shotHit
             ])
         }
     }
@@ -127,9 +136,22 @@ class GameViewModel {
                         if gameData.shotHit[0] && gameData.shotHit[1] {
                             gameData.p1Turn = true
                             gameData.shotsRemaining = 2
+                        } else if gameData.shotsRemaining == 1 && cupHit == 0 {
+                            gameData.ballsBack = true
+                        } else if gameData.shotsRemaining == 0 {
+                            if cupHit == 0 {
+                                gameData.shotHit = [true, true]
+                                gameData.p1Turn = true
+                            } else {
+                                gameData.p1Turn = false
+                                gameData.shotHit = [false, false]
+                            }
+                            gameData.shotsRemaining = 2
                         }
                     }
                 }
+                print(gameData.p1Turn)
+                print(gameData.shotsRemaining)
                 firebase.gamesRef?.document(gameID).updateData([
                     "p1CupsLeft": gameData.p1CupsLeft,
                     "p1CupsHit": gameData.p1CupsHit,
@@ -138,7 +160,8 @@ class GameViewModel {
                     "p1Turn": gameData.p1Turn,
                     "shotHit": gameData.shotHit,
                     "shotsRemaining": gameData.shotsRemaining,
-                    "score": gameData.score
+                    "score": gameData.score,
+                    "ballsBack": gameData.ballsBack
                 ])
             } else if player.id == players[1].id {
                 if gameData.p2OnRedemption {
@@ -160,6 +183,17 @@ class GameViewModel {
                         if gameData.shotHit[0] && gameData.shotHit[1] {
                             gameData.p1Turn = false
                             gameData.shotsRemaining = 2
+                        } else if gameData.shotsRemaining == 1 && cupHit == 0 {
+                            gameData.ballsBack = true
+                        } else if gameData.shotsRemaining == 0 {
+                            if cupHit == 0 {
+                                gameData.shotHit = [true, true]
+                                gameData.p1Turn = false
+                            } else {
+                                gameData.p1Turn = true
+                                gameData.shotHit = [false, false]
+                            }
+                            gameData.shotsRemaining = 2
                         }
                     }
                 }
@@ -171,7 +205,8 @@ class GameViewModel {
                     "p1Turn": gameData.p1Turn,
                     "shotHit": gameData.shotHit,
                     "shotsRemaining": gameData.shotsRemaining,
-                    "score": gameData.score
+                    "score": gameData.score,
+                    "ballsBack": gameData.ballsBack
                 ])
             }
         }
@@ -179,6 +214,7 @@ class GameViewModel {
     
     func playerTurnFinished(player: Player) {
         if var gameData = gameData {
+            gameData.shotHit = [false, false]
             gameData.shotsRemaining = 2
             if player.id == players[0].id {
                 gameData.p1Turn = false
@@ -197,7 +233,8 @@ class GameViewModel {
                     gameData.score[0] = 6
                 }
             }
-            
+            print(gameData.p1Turn)
+            print(gameData.shotsRemaining)
             firebase.gamesRef?.document(gameID).updateData([
                 "shotsRemaining": gameData.shotsRemaining,
                 "p1Turn": gameData.p1Turn,

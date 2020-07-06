@@ -12,11 +12,7 @@ import FirebaseStorage
 class ProfileViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
 
     @IBOutlet weak var editImageButton: UIButton!
-    @IBOutlet weak var profilePic: UIImageView! {
-        didSet{
-            uploadImage()
-        }
-    }
+    @IBOutlet weak var profilePic: UIImageView!
     @IBOutlet weak var statsTableView: UITableView!
     @IBOutlet weak var nameLabel: UILabel!
     var firebase = FirebaseService.shared
@@ -25,12 +21,16 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
     var statsArray = [Int]()
     let storage = Storage.storage()
     let userID = FirebaseService.shared.authentication?.currentUser?.uid
+    let userDefaults = UserDefaults()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         statsTableView.delegate = self
         statsTableView.dataSource = self
         statsTableView.tableFooterView = UIView()
+        if let image = loadImage(fileName: "profilePic.png") {
+            profilePic.image = image
+        }
         getPlayerData(firebase.authentication?.currentUser?.uid ?? "") { player in
             self.player = player
             self.statsArray = [player.games, player.wins, player.losses, player.shots, player.shotsHit, player.shotsMissed, player.redemptions]
@@ -81,6 +81,12 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
         guard let image = info[.editedImage] as? UIImage else { return }
         dismiss(animated: true)
         profilePic.image = image
+        if let data = image.pngData() {
+            let filename = getDocumentsDirectory().appendingPathComponent("profilePic.png")
+            try? data.write(to: filename)
+        }
+        uploadImage()
+        
     }
     
     @IBAction func editImageClicked(_ sender: Any) {
@@ -88,14 +94,30 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
     }
     
     func uploadImage() {
-        let profilePicRef = storage.reference().child("profilePics/\(userID).png")
-        let imageData = profilePic.image?.pngData()
+        let profilePicRef = storage.reference().child("profilePics/\(userID ?? "").png")
+        guard let imageData = profilePic.image?.pngData() else { return }
         let uploadTask = profilePicRef.putData(imageData, metadata: nil) { (metadata, error) in
             guard let metadata = metadata else {
                 //Error
                 return
             }
         }
+    }
+    
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
+    }
+    
+    func loadImage(fileName: String) -> UIImage? {
+        let fileURL = getDocumentsDirectory().appendingPathComponent(fileName)
+        do {
+            let imageData = try Data(contentsOf: fileURL)
+            return UIImage(data: imageData)
+        } catch {
+            print("Error loading image: \(error)")
+        }
+        return nil
     }
     
 

@@ -22,6 +22,7 @@ struct Player: Codable {
     var shotsMissed: Int
     var shotPercentage: String
     var redemptions: Int
+    var friends: [String]
     
     init() {
         self.id = ""
@@ -37,5 +38,6 @@ struct Player: Codable {
         self.shotsMissed = 0
         self.shotPercentage = "0%"
         self.redemptions = 0
+        self.friends = []
     }
 }

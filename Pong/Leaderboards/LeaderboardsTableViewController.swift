@@ -12,14 +12,25 @@ import UIKit
 class LeaderboardsTableViewController: UITableViewController {
     
     var allPlayers: [Player] = []
+    var filteredPlayers: [Player] = []
+    let searchController = UISearchController(searchResultsController: nil)
+    var isSearchBarEmpty: Bool {
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+    var isFiltering: Bool {
+        return searchController.isActive && !isSearchBarEmpty
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         getAllPlayers()
         let nib = UINib(nibName: "LeaderboardsTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "statsCell")
-        
-        
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Players"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
     }
     
     func getAllPlayers() {
@@ -55,6 +66,9 @@ class LeaderboardsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isFiltering {
+            return filteredPlayers.count
+        }
         return allPlayers.count
     }
     
@@ -65,13 +79,19 @@ class LeaderboardsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "statsCell", for: indexPath) as! LeaderboardsTableViewCell
-        if (allPlayers.indices.contains(indexPath.row)) {
-            cell.name.text = "\(allPlayers[indexPath.row].firstName) \(allPlayers[indexPath.row].lastName)"
-            cell.wins.text = "\(allPlayers[indexPath.row].wins) W"
-            cell.losses.text = "\(allPlayers[indexPath.row].losses) L"
-            cell.shotPercent.text = "\(formatPercentage(allPlayers[indexPath.row].shotPercentage)) Shots Hit"
-            cell.redemptions.text = "\(allPlayers[indexPath.row].redemptions) Redemptions"
+        let player: Player
+        if isFiltering {
+            player = filteredPlayers[indexPath.row]
+        } else {
+            player = allPlayers[indexPath.row]
         }
+//        if (allPlayers.indices.contains(indexPath.row)) {
+            cell.name.text = "\(player.firstName) \(player.lastName)"
+            cell.wins.text = "\(player.wins) W"
+            cell.losses.text = "\(player.losses) L"
+            cell.shotPercent.text = "\(formatPercentage(player.shotPercentage)) Shots Hit"
+            cell.redemptions.text = "\(player.redemptions) Redemptions"
+//        }
         return cell
     }
     
@@ -84,5 +104,19 @@ class LeaderboardsTableViewController: UITableViewController {
         formatted = formatted.suffix(2)
         return "\(String(formatted))%"
     }
+    
+    func filterContentForSearchText(_ searchText: String) {
+        filteredPlayers = allPlayers.filter { (player: Player) -> Bool in
+            return player.firstName.lowercased().contains(searchText.lowercased())
+        }
+        tableView.reloadData()
+    }
 
+}
+
+extension LeaderboardsTableViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchBar = searchController.searchBar
+        filterContentForSearchText(searchBar.text!)
+    }
 }
