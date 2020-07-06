@@ -96,6 +96,7 @@ class LeaderboardsTableViewController: UITableViewController {
     }
     
     func formatPercentage(_ shotPercentage: String) -> String {
+        print(shotPercentage)
         if shotPercentage == "0" { return "\(shotPercentage)%" }
         var formatted = shotPercentage.prefix(4)
         if formatted.count == 3 {

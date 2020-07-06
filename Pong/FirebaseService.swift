@@ -77,9 +77,10 @@ class FirebaseService {
             "shots": 0,
             "shotsMissed": 0,
             "shotsHit": 0,
-            "shotPercentage": "0%",
+            "shotPercentage": "0",
             "redemptions": 0,
-            "rank": 1
+            "rank": 1,
+            "friends": []
         ]) { err in
             if let err = err {
                 print("Error adding document: \(err)")
